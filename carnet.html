@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<!-- Google Tag Manager -->
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-PDM658GX');</script>
+<!-- End Google Tag Manager -->
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mon carnet de scores de bowling | BowlingFacile.fr</title>
+<meta name="description" content="Notez vos scores de bowling après chaque partie et suivez votre progression dans le temps : moyenne, meilleur score, courbe d'évolution.">
+<link rel="canonical" href="https://bowlingfacile.fr/carnet.html">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="fr_FR">
+<meta property="og:site_name" content="BowlingFacile.fr">
+<meta property="og:title" content="Mon carnet de scores de bowling">
+<meta property="og:description" content="Notez vos scores après chaque partie et suivez votre progression : moyenne, meilleur score, courbe d'évolution.">
+<meta property="og:url" content="https://bowlingfacile.fr/carnet.html">
+<meta name="twitter:card" content="summary">
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+<!-- Google Tag Manager (noscript) -->
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-PDM658GX"
+height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<!-- End Google Tag Manager (noscript) -->
+
+<header class="site-header">
+  <div class="nav-bar">
+    <a href="index.html" class="logo"><span class="pin-icon">🎳</span> Bowling<span>Facile</span></a>
+    <button class="menu-toggle" aria-label="Ouvrir le menu">☰</button>
+    <nav class="main-nav">
+      <ul>
+        <li><a href="index.html">Accueil</a></li>
+        <li><a href="regles.html">Les règles</a></li>
+        <li><a href="technique.html">La technique</a></li>
+        <li><a href="materiel.html">Le matériel</a></li>
+        <li><a href="vocabulaire.html">Vocabulaire</a></li>
+        <li><a href="conseils.html">Conseils</a></li>
+        <li><a href="carnet.html" class="active">Mon carnet</a></li>
+        <li><a href="faq.html">FAQ</a></li>
+        <li><a href="histoire.html">Histoire</a></li>
+        <li><a href="ressources.html">Ressources</a></li>
+        <li><a href="actualites.html">Actualités</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<section class="page-hero">
+  <div class="container">
+    <h1>Mon carnet de scores</h1>
+    <p>Notez vos parties et suivez votre progression, partie après partie.</p>
+  </div>
+</section>
+
+<section>
+  <div class="container content-block">
+
+    <div class="callout bleu">
+      <strong>Comment ça marche</strong><br>
+      Vos scores sont enregistrés uniquement dans ce navigateur, sur cet appareil (aucun compte, aucun envoi sur internet). Si vous changez d'appareil ou de navigateur, vous ne retrouverez pas votre historique ici.
+    </div>
+
+    <h2>Ajouter une partie</h2>
+    <form id="score-form" class="score-form">
+      <div class="score-form-row">
+        <label for="score-date">Date</label>
+        <input type="date" id="score-date" name="date" required>
+      </div>
+      <div class="score-form-row">
+        <label for="score-value">Score (0 à 300)</label>
+        <input type="number" id="score-value" name="score" min="0" max="300" required placeholder="Ex : 120">
+      </div>
+      <div class="score-form-row">
+        <label for="score-note">Note (facultatif)</label>
+        <input type="text" id="score-note" name="note" placeholder="Ex : entre amis, boule de 12 livres...">
+      </div>
+      <button type="submit" class="btn">Ajouter ce score</button>
+    </form>
+
+  </div>
+</section>
+
+<section class="alt">
+  <div class="container content-block">
+
+    <h2>Ma progression</h2>
+    <div id="score-empty" class="callout">
+      Aucune partie enregistrée pour l'instant. Ajoutez votre premier score ci-dessus !
+    </div>
+
+    <div id="score-stats" class="stats-grid" hidden>
+      <div class="stat-card">
+        <span class="stat-value" id="stat-count">0</span>
+        <span class="stat-label">Parties enregistrées</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-value" id="stat-best">0</span>
+        <span class="stat-label">Meilleur score</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-value" id="stat-avg">0</span>
+        <span class="stat-label">Score moyen</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-value" id="stat-last">0</span>
+        <span class="stat-label">Dernière partie</span>
+      </div>
+    </div>
+
+    <div id="score-chart-wrap" hidden>
+      <h3>Courbe d'évolution</h3>
+      <svg id="score-chart" viewBox="0 0 600 220" role="img" aria-label="Courbe d'évolution de vos scores dans le temps"></svg>
+    </div>
+
+    <div id="score-list-wrap" hidden>
+      <h3>Historique</h3>
+      <ul class="score-list" id="score-list"></ul>
+      <button type="button" id="score-clear" class="replay-btn">Effacer tout l'historique</button>
+    </div>
+
+  </div>
+</section>
+
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-links">
+      <a href="index.html">Accueil</a>
+      <a href="regles.html">Les règles</a>
+      <a href="technique.html">La technique</a>
+      <a href="materiel.html">Le matériel</a>
+      <a href="vocabulaire.html">Vocabulaire</a>
+      <a href="conseils.html">Conseils</a>
+      <a href="carnet.html">Mon carnet</a>
+      <a href="faq.html">FAQ</a>
+      <a href="histoire.html">Histoire</a>
+      <a href="ressources.html">Ressources</a>
+      <a href="actualites.html">Actualités</a>
+    </div>
+    <p>BowlingFacile.fr — Le guide du bowling pour les débutants.</p>
+  </div>
+</footer>
+
+<script src="assets/script.js"></script>
+</body>
+</html>
