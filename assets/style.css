@@ -96,7 +96,7 @@ nav.main-nav a.active { color: var(--orange); }
   cursor: pointer;
 }
 
-@media (max-width: 760px) {
+@media (max-width: 1099px) {
   .menu-toggle { display: block; }
   nav.main-nav {
     display: none;
