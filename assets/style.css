@@ -155,10 +155,16 @@ nav.main-nav a.active { color: var(--orange); }
 .btn-secondary {
   background: transparent;
   border: 2px solid var(--blanc);
-  margin-left: 12px;
 }
 
 .btn-secondary:hover { background: rgba(255,255,255,0.15); }
+
+.hero-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  justify-content: center;
+}
 
 /* SECTIONS GENERIC */
 section { padding: 60px 0; }
