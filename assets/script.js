@@ -243,6 +243,21 @@ document.addEventListener("DOMContentLoaded", function () {
       calcTotalsRow.innerHTML = "";
 
       var current = currentFrameIndex();
+
+      if (current === -1) {
+        calcPinsInput.disabled = true;
+        calcRollBtn.disabled = true;
+        calcPinsInput.removeAttribute("max");
+      } else {
+        var maxPins = pinsRemaining(current);
+        calcPinsInput.disabled = false;
+        calcRollBtn.disabled = false;
+        calcPinsInput.max = maxPins;
+        if (calcPinsInput.value !== "" && parseInt(calcPinsInput.value, 10) > maxPins) {
+          calcPinsInput.value = maxPins;
+        }
+      }
+
       var running = 0;
       var brokenAt = -1;
 
@@ -323,6 +338,14 @@ document.addEventListener("DOMContentLoaded", function () {
       if (e.key === "Enter") {
         e.preventDefault();
         calcRollBtn.click();
+      }
+    });
+
+    calcPinsInput.addEventListener("input", function () {
+      var max = parseInt(calcPinsInput.max, 10);
+      var val = parseInt(calcPinsInput.value, 10);
+      if (!isNaN(max) && !isNaN(val) && val > max) {
+        calcPinsInput.value = max;
       }
     });
 
