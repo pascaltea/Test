@@ -29,13 +29,12 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   });
 
-  var handSteps = {
-    droitier: { 1: "D", 2: "G", 3: "D", 4: "G" },
-    gaucher: { 1: "G", 2: "D", 3: "G", 4: "D" }
-  };
+  // x=80 est toujours le côté gauche de l'image (pied gauche, "G"),
+  // x=120 est toujours le côté droit (pied droit, "D") : seule l'étape
+  // (1 à 4) qui occupe chaque position change selon la main.
   var handX = {
-    droitier: { 1: 80, 2: 120, 3: 80, 4: 120 },
-    gaucher: { 1: 120, 2: 80, 3: 120, 4: 80 }
+    droitier: { 1: 120, 2: 80, 3: 120, 4: 80 },
+    gaucher: { 1: 80, 2: 120, 3: 80, 4: 120 }
   };
   var handDesc = {
     droitier: "pied droit, gauche, droit, puis grand glissé du pied gauche",
@@ -64,8 +63,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
         card.querySelectorAll(".foot-side").forEach(function (el) {
           var step = el.getAttribute("data-step");
-          el.textContent = handSteps[hand][step];
-          el.setAttribute("x", handX[hand][step]);
+          var x = handX[hand][step];
+          el.textContent = x === 80 ? "G" : "D";
+          el.setAttribute("x", x);
         });
 
         card.querySelectorAll(".foot, .foot-number").forEach(function (el) {
