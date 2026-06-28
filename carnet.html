@@ -80,6 +80,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         <input type="text" id="score-note" name="note" placeholder="Ex : entre amis, boule de 12 livres...">
       </div>
       <button type="submit" class="btn">Ajouter ce score</button>
+      <p id="score-form-msg" class="form-msg" role="status" aria-live="polite"></p>
     </form>
 
   </div>
@@ -120,7 +121,10 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     <div id="score-list-wrap" hidden>
       <h3>Historique</h3>
       <ul class="score-list" id="score-list"></ul>
-      <button type="button" id="score-clear" class="replay-btn">Effacer tout l'historique</button>
+      <div class="score-list-actions">
+        <button type="button" id="score-export" class="replay-btn">⭳ Exporter (CSV)</button>
+        <button type="button" id="score-clear" class="replay-btn">Effacer tout l'historique</button>
+      </div>
     </div>
 
   </div>

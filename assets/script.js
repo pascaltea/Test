@@ -106,7 +106,12 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     function saveScores(scores) {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(scores));
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(scores));
+        return true;
+      } catch (e) {
+        return false;
+      }
     }
 
     function formatDate(iso) {
@@ -263,18 +268,36 @@ document.addEventListener("DOMContentLoaded", function () {
       renderChart(scores);
     }
 
+    var formMsg = document.getElementById("score-form-msg");
+    function setFormMsg(text, isError) {
+      if (!formMsg) return;
+      formMsg.textContent = text;
+      formMsg.classList.toggle("form-msg-error", !!isError);
+    }
+
     scoreForm.addEventListener("submit", function (e) {
       e.preventDefault();
       var date = document.getElementById("score-date").value;
       var score = parseInt(document.getElementById("score-value").value, 10);
       var note = document.getElementById("score-note").value.trim();
 
-      if (!date || isNaN(score) || score < 0 || score > 300) return;
+      if (!date) {
+        setFormMsg("Merci d'indiquer une date.", true);
+        return;
+      }
+      if (isNaN(score) || score < 0 || score > 300) {
+        setFormMsg("Le score doit être un nombre entre 0 et 300.", true);
+        return;
+      }
 
       var scores = loadScores();
       scores.push({ id: Date.now(), date: date, score: score, note: note });
-      saveScores(scores);
+      if (!saveScores(scores)) {
+        setFormMsg("Impossible d'enregistrer : le stockage local est bloqué ou plein sur ce navigateur.", true);
+        return;
+      }
 
+      setFormMsg("Score ajouté !", false);
       document.getElementById("score-value").value = "";
       document.getElementById("score-note").value = "";
 
@@ -288,6 +311,41 @@ document.addEventListener("DOMContentLoaded", function () {
           saveScores([]);
           render();
         }
+      });
+    }
+
+    function escapeCsvField(field) {
+      var str = String(field);
+      if (/[";\n]/.test(str)) {
+        str = '"' + str.replace(/"/g, '""') + '"';
+      }
+      return str;
+    }
+
+    var exportBtn = document.getElementById("score-export");
+    if (exportBtn) {
+      exportBtn.addEventListener("click", function () {
+        var scores = loadScores();
+        if (scores.length === 0) return;
+
+        var sorted = scores.slice().sort(function (a, b) { return a.date.localeCompare(b.date); });
+        var rows = [["Date", "Score", "Note"]];
+        sorted.forEach(function (entry) {
+          rows.push([formatDate(entry.date), entry.score, entry.note || ""]);
+        });
+        var csv = rows.map(function (row) {
+          return row.map(escapeCsvField).join(";");
+        }).join("\r\n");
+
+        var blob = new Blob(["\ufeff" + csv], { type: "text/csv;charset=utf-8;" });
+        var url = URL.createObjectURL(blob);
+        var link = document.createElement("a");
+        link.href = url;
+        link.download = "scores-bowling-" + new Date().toISOString().slice(0, 10) + ".csv";
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        URL.revokeObjectURL(url);
       });
     }
 
