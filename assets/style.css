@@ -65,7 +65,9 @@ header.site-header {
 .logo span { color: var(--orange); }
 
 .pin-icon {
-  font-size: 1.6rem;
+  width: 28px;
+  height: 28px;
+  display: block;
 }
 
 nav.main-nav ul {
