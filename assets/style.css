@@ -439,8 +439,8 @@ footer .footer-links {
 }
 
 @keyframes swingArm {
-  0% { transform: rotate(-28deg); }
-  100% { transform: rotate(35deg); }
+  0% { transform: rotate(-85deg); }
+  100% { transform: rotate(85deg); }
 }
 
 @media (prefers-reduced-motion: reduce) {
