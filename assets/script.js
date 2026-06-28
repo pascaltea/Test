@@ -33,6 +33,10 @@ document.addEventListener("DOMContentLoaded", function () {
     droitier: { 1: "D", 2: "G", 3: "D", 4: "G" },
     gaucher: { 1: "G", 2: "D", 3: "G", 4: "D" }
   };
+  var handX = {
+    droitier: { 1: 80, 2: 120, 3: 80, 4: 120 },
+    gaucher: { 1: 120, 2: 80, 3: 120, 4: 80 }
+  };
   var handDesc = {
     droitier: "pied droit, gauche, droit, puis grand glissé du pied gauche",
     gaucher: "pied gauche, droit, gauche, puis grand glissé du pied droit"
@@ -61,6 +65,17 @@ document.addEventListener("DOMContentLoaded", function () {
         card.querySelectorAll(".foot-side").forEach(function (el) {
           var step = el.getAttribute("data-step");
           el.textContent = handSteps[hand][step];
+          el.setAttribute("x", handX[hand][step]);
+        });
+
+        card.querySelectorAll(".foot, .foot-number").forEach(function (el) {
+          var step = el.getAttribute("data-step");
+          var x = handX[hand][step];
+          if (el.tagName === "circle") {
+            el.setAttribute("cx", x);
+          } else {
+            el.setAttribute("x", x);
+          }
         });
 
         if (desc) { desc.textContent = handDesc[hand]; }
