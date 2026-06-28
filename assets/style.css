@@ -389,6 +389,33 @@ footer .footer-links {
 
 .replay-btn:hover { background: var(--bleu-nuit); }
 
+.hand-toggle {
+  display: inline-flex;
+  background: #eef1f6;
+  border-radius: 50px;
+  padding: 3px;
+  margin-bottom: 14px;
+}
+
+.hand-btn {
+  background: transparent;
+  border: none;
+  color: var(--gris);
+  font-weight: 600;
+  font-size: 0.82rem;
+  padding: 6px 16px;
+  border-radius: 50px;
+  cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+
+.hand-btn.active {
+  background: var(--bleu-piste);
+  color: var(--blanc);
+}
+
+.foot-side { font-weight: 700; }
+
 .diagram-card.paused .foot,
 .diagram-card.paused .pendule-arm {
   animation-play-state: paused;

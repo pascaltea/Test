@@ -28,4 +28,47 @@ document.addEventListener("DOMContentLoaded", function () {
       btn.textContent = paused ? "▶ Lecture" : "⏸ Pause";
     });
   });
+
+  var handSteps = {
+    droitier: { 1: "D", 2: "G", 3: "D", 4: "G" },
+    gaucher: { 1: "G", 2: "D", 3: "G", 4: "D" }
+  };
+  var handDesc = {
+    droitier: "pied droit, gauche, droit, puis grand glissé du pied gauche",
+    gaucher: "pied gauche, droit, gauche, puis grand glissé du pied droit"
+  };
+  var handLabel = {
+    droitier: "un droitier",
+    gaucher: "un gaucher"
+  };
+
+  document.querySelectorAll(".hand-toggle").forEach(function (toggleGroup) {
+    var card = toggleGroup.closest(".diagram-card");
+    if (!card) return;
+    var svg = card.querySelector("svg");
+    var desc = card.querySelector(".hand-desc");
+
+    toggleGroup.querySelectorAll(".hand-btn").forEach(function (btn) {
+      btn.addEventListener("click", function () {
+        var hand = btn.getAttribute("data-hand-value");
+        if (card.getAttribute("data-hand") === hand) return;
+
+        toggleGroup.querySelectorAll(".hand-btn").forEach(function (b) {
+          b.classList.toggle("active", b === btn);
+        });
+        card.setAttribute("data-hand", hand);
+
+        card.querySelectorAll(".foot-side").forEach(function (el) {
+          var step = el.getAttribute("data-step");
+          el.textContent = handSteps[hand][step];
+        });
+
+        if (desc) { desc.textContent = handDesc[hand]; }
+
+        if (svg) {
+          svg.setAttribute("aria-label", "Schéma vu de dessus des 4 pas d'approche pour " + handLabel[hand] + ", du départ jusqu'à la ligne de faute");
+        }
+      });
+    });
+  });
 });
