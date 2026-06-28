@@ -1,0 +1,15 @@
+<svg width="360" height="70" viewBox="0 0 360 70" xmlns="http://www.w3.org/2000/svg">
+  <rect width="360" height="70" fill="#ffffff"/>
+  <!-- Ligne piste -->
+  <line x1="6" y1="35" x2="36" y2="35" stroke="#d0d0d0" stroke-width="2" stroke-linecap="round"/>
+  <!-- Boule -->
+  <circle cx="56" cy="35" r="22" fill="#1B2B4B"/>
+  <!-- Trous -->
+  <circle cx="49" cy="26" r="3" fill="#ffffff" opacity="0.9"/>
+  <circle cx="57" cy="22" r="3" fill="#ffffff" opacity="0.9"/>
+  <circle cx="64" cy="30" r="3" fill="#ffffff" opacity="0.9"/>
+  <!-- Texte -->
+  <text x="90" y="43" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="30" letter-spacing="-1">
+    <tspan font-weight="700" fill="#1B2B4B">Bowling</tspan><tspan font-weight="300" fill="#E8622A"> Facile</tspan>
+  </text>
+</svg>
