@@ -70,7 +70,9 @@ header.site-header {
 
 nav.main-nav ul {
   display: flex;
-  gap: 22px;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 8px 18px;
   list-style: none;
   margin: 0;
   padding: 0;
@@ -79,7 +81,8 @@ nav.main-nav ul {
 nav.main-nav a {
   color: var(--blanc);
   font-weight: 600;
-  font-size: 0.95rem;
+  font-size: 0.92rem;
+  white-space: nowrap;
 }
 
 nav.main-nav a.active { color: var(--orange); }
@@ -344,3 +347,118 @@ footer .footer-links {
   text-transform: uppercase;
   letter-spacing: 0.5px;
 }
+
+/* DIAGRAMMES ANIMÉS */
+.diagram-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 24px;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.diagram-card {
+  background: var(--blanc);
+  border-radius: var(--radius);
+  padding: 20px;
+  text-align: center;
+  box-shadow: 0 4px 16px rgba(11,29,58,0.07);
+  border: 1px solid #e6e9ef;
+}
+
+.diagram-card svg { width: 100%; height: auto; max-width: 220px; margin: 0 auto; }
+.diagram-card h3 { margin: 14px 0 6px; font-size: 1.05rem; }
+.diagram-card p { margin: 0 0 12px; color: var(--gris); font-size: 0.9rem; }
+
+.replay-btn {
+  background: var(--bleu-piste);
+  color: var(--blanc);
+  border: none;
+  border-radius: 50px;
+  padding: 7px 18px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.replay-btn:hover { background: var(--bleu-nuit); }
+
+.diagram-card.paused .foot,
+.diagram-card.paused .pendule-arm {
+  animation-play-state: paused;
+}
+
+.foot { opacity: 0.35; fill: var(--bleu-piste); transition: opacity 0.2s; }
+.foot.glow-1 { animation: stepGlow 2.4s ease-in-out infinite; }
+.foot.glow-2 { animation: stepGlow 2.4s ease-in-out infinite; animation-delay: 0.5s; }
+.foot.glow-3 { animation: stepGlow 2.4s ease-in-out infinite; animation-delay: 1.0s; }
+.foot.glow-4 { animation: stepGlow 2.4s ease-in-out infinite; animation-delay: 1.5s; }
+
+@keyframes stepGlow {
+  0%, 80%, 100% { opacity: 0.35; fill: var(--bleu-piste); }
+  10%, 30% { opacity: 1; fill: var(--orange); }
+}
+
+.pendule-arm {
+  transform-box: fill-box;
+  transform-origin: 50% 0%;
+  animation: swingArm 1.8s ease-in-out infinite alternate;
+}
+
+@keyframes swingArm {
+  0% { transform: rotate(-28deg); }
+  100% { transform: rotate(35deg); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .foot, .pendule-arm {
+    animation: none !important;
+  }
+  .foot.glow-1 { opacity: 1; fill: var(--orange); }
+}
+
+/* FAQ ACCORDÉON */
+.faq-list { max-width: 760px; margin: 0 auto; display: flex; flex-direction: column; gap: 14px; }
+
+details.faq-item {
+  background: var(--blanc);
+  border: 1px solid #e6e9ef;
+  border-radius: var(--radius);
+  padding: 4px 22px;
+  box-shadow: 0 4px 16px rgba(11,29,58,0.06);
+}
+
+details.faq-item summary {
+  cursor: pointer;
+  font-weight: 700;
+  padding: 16px 0;
+  list-style: none;
+  position: relative;
+}
+
+details.faq-item summary::-webkit-details-marker { display: none; }
+
+details.faq-item summary::after {
+  content: "+";
+  position: absolute;
+  right: 0;
+  top: 14px;
+  font-size: 1.3rem;
+  color: var(--orange);
+}
+
+details.faq-item[open] summary::after { content: "−"; }
+
+details.faq-item p { margin: 0 0 18px; color: var(--gris); }
+
+/* RESSOURCES */
+.resource-card { position: relative; }
+.resource-card .ext-icon { font-size: 0.85rem; opacity: 0.6; margin-left: 4px; }
+.resource-card h3 { display: flex; align-items: center; gap: 6px; }
+.resource-category { margin-top: 50px; margin-bottom: 6px; text-align: center; }
+.resource-category:first-of-type { margin-top: 0; }
+
+/* ACTUALITÉS */
+.actu-card { border-top: 4px solid var(--orange); }
+.actu-card.bleu { border-top-color: var(--bleu-piste); }
+.actu-card .actu-meta { color: var(--gris); font-size: 0.82rem; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px; display: block; }
