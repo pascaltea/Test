@@ -169,36 +169,42 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         <button class="replay-btn" type="button">⏸ Pause</button>
       </div>
 
-      <div class="diagram-card">
-        <svg viewBox="0 0 200 300" role="img" aria-label="Schéma vu de dessus de la trajectoire de la boule depuis le lâcher jusqu'au pocket entre les quilles 1 et 3">
+      <div class="diagram-card" data-hand="droitier">
+        <div class="hand-toggle" role="group" aria-label="Choisir la main qui lance">
+          <button type="button" class="hand-btn active" data-hand-value="droitier">Droitier</button>
+          <button type="button" class="hand-btn" data-hand-value="gaucher">Gaucher</button>
+        </div>
+        <svg viewBox="0 0 200 300" role="img" aria-label="Schéma vu de dessus de la trajectoire de la boule depuis le lâcher, en passant par les 7 flèches au sol, jusqu'au pocket entre les quilles 1 et 3 (ou 1 et 2 pour un gaucher)">
           <line x1="40" y1="10" x2="40" y2="300" stroke="#cdd5e0" stroke-width="2"/>
           <line x1="160" y1="10" x2="160" y2="300" stroke="#cdd5e0" stroke-width="2"/>
-          <g fill="#13294b" opacity="0.45">
-            <polygon points="60,200 64,190 56,190"/>
-            <polygon points="80,195 84,185 76,185"/>
-            <polygon points="100,193 104,183 96,183"/>
-            <polygon points="120,195 124,185 116,185"/>
-            <polygon points="140,200 144,190 136,190"/>
+          <g class="aim-arrow" data-arrow="1"><polygon points="40,200 44,190 36,190"/></g>
+          <g class="aim-arrow" data-arrow="2"><polygon points="60,200 64,190 56,190"/></g>
+          <g class="aim-arrow" data-arrow="3"><polygon points="80,200 84,190 76,190"/></g>
+          <g class="aim-arrow" data-arrow="4"><polygon points="100,200 104,190 96,190"/></g>
+          <g class="aim-arrow" data-arrow="5"><polygon points="120,200 124,190 116,190"/></g>
+          <g class="aim-arrow" data-arrow="6"><polygon points="140,200 144,190 136,190"/></g>
+          <g class="aim-arrow" data-arrow="7"><polygon points="160,200 164,190 156,190"/></g>
+          <g class="lane-flip">
+            <circle cx="70" cy="35" r="8" fill="#9fb0c9"/>
+            <circle cx="90" cy="35" r="8" fill="#9fb0c9"/>
+            <circle cx="110" cy="35" r="8" fill="#9fb0c9"/>
+            <circle cx="130" cy="35" r="8" fill="#9fb0c9"/>
+            <circle cx="80" cy="55" r="8" fill="#9fb0c9"/>
+            <circle cx="100" cy="55" r="8" fill="#9fb0c9"/>
+            <circle cx="120" cy="55" r="8" fill="#9fb0c9"/>
+            <circle cx="90" cy="75" r="8" fill="#9fb0c9"/>
+            <circle cx="110" cy="75" r="8" fill="#ff6b35"/>
+            <circle cx="100" cy="95" r="8" fill="#ff6b35"/>
+            <path id="traj" d="M100,290 Q55,170 96,90" fill="none" stroke="#ff6b35" stroke-width="2" stroke-dasharray="4 4" opacity="0.55"/>
+            <circle r="8" fill="#ff6b35">
+              <animateMotion dur="2.6s" repeatCount="indefinite" rotate="auto">
+                <mpath href="#traj"></mpath>
+              </animateMotion>
+            </circle>
           </g>
-          <circle cx="70" cy="35" r="8" fill="#9fb0c9"/>
-          <circle cx="90" cy="35" r="8" fill="#9fb0c9"/>
-          <circle cx="110" cy="35" r="8" fill="#9fb0c9"/>
-          <circle cx="130" cy="35" r="8" fill="#9fb0c9"/>
-          <circle cx="80" cy="55" r="8" fill="#9fb0c9"/>
-          <circle cx="100" cy="55" r="8" fill="#9fb0c9"/>
-          <circle cx="120" cy="55" r="8" fill="#9fb0c9"/>
-          <circle cx="90" cy="75" r="8" fill="#9fb0c9"/>
-          <circle cx="110" cy="75" r="8" fill="#ff6b35"/>
-          <circle cx="100" cy="95" r="8" fill="#ff6b35"/>
-          <path id="traj" d="M100,290 Q55,170 96,90" fill="none" stroke="#ff6b35" stroke-width="2" stroke-dasharray="4 4" opacity="0.55"/>
-          <circle r="8" fill="#ff6b35">
-            <animateMotion dur="2.6s" repeatCount="indefinite" rotate="auto">
-              <mpath href="#traj"></mpath>
-            </animateMotion>
-          </circle>
         </svg>
         <h3>La trajectoire vers le pocket</h3>
-        <p>Une légère courbe (le « hook ») qui vient percuter les quilles entre la 1 et la 3 : c'est le « pocket », la zone idéale pour un strike.</p>
+        <p>Une légère courbe (le « hook ») qui passe par les 7 flèches au sol et vient percuter les quilles entre la 1 et la 3 (ou la 1 et la 2 pour un gaucher) : c'est le « pocket », la zone idéale pour un strike.</p>
         <button class="replay-btn" type="button">⏸ Pause</button>
       </div>
 

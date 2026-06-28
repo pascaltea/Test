@@ -117,7 +117,7 @@ document.addEventListener("DOMContentLoaded", function () {
       if (!kg || kg <= 0) {
         weightResult.textContent = "Indiquez votre poids pour voir une suggestion.";
         weightFill.style.width = "0%";
-        weightMarker.style.left = "0%";
+        weightMarker.style.left = "9px";
         return;
       }
       var lbs = Math.round(kg * 0.2205);
@@ -125,7 +125,7 @@ document.addEventListener("DOMContentLoaded", function () {
       if (lbs > MAX_LBS) lbs = MAX_LBS;
       var pct = ((lbs - MIN_LBS) / (MAX_LBS - MIN_LBS)) * 100;
       weightFill.style.width = pct + "%";
-      weightMarker.style.left = pct + "%";
+      weightMarker.style.left = "calc(9px + (100% - 18px) * " + (pct / 100) + ")";
       var approxKg = Math.round(lbs * 0.4536 * 10) / 10;
       weightResult.textContent = "Boule recommandée : environ " + lbs + " livres (≈ " + approxKg + " kg).";
     });

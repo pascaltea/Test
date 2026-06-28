@@ -681,6 +681,7 @@ details.faq-item p { margin: 0 0 18px; color: var(--gris); }
 }
 
 .pin-btn {
+  flex: 1 1 0;
   background: #eef1f6;
   border: none;
   color: var(--gris);
@@ -689,6 +690,8 @@ details.faq-item p { margin: 0 0 18px; color: var(--gris); }
   padding: 7px 16px;
   border-radius: 50px;
   cursor: pointer;
+  white-space: nowrap;
+  text-align: center;
   transition: background 0.15s ease, color 0.15s ease;
 }
 
@@ -738,6 +741,9 @@ details.faq-item p { margin: 0 0 18px; color: var(--gris); }
 [data-hand="gaucher"] .aim-arrow[data-arrow="2"] polygon {
   fill: var(--orange);
 }
+
+.lane-flip { transform-box: view-box; transform-origin: 100px 0; transition: transform 0.2s ease; }
+[data-hand="gaucher"] .lane-flip { transform: scale(-1, 1); }
 
 .sight-line { display: none; }
 [data-hand="droitier"] .sight-droitier,
@@ -842,7 +848,7 @@ details.faq-item p { margin: 0 0 18px; color: var(--gris); }
 .weight-gauge-marker {
   position: absolute;
   top: -4px;
-  left: 0%;
+  left: 9px;
   width: 18px;
   height: 18px;
   margin-left: -9px;
