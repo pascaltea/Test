@@ -654,3 +654,275 @@ details.faq-item p { margin: 0 0 18px; color: var(--gris); }
   flex-wrap: wrap;
   gap: 12px;
 }
+
+/* MAIN/SECONDAIRE SELON LA MAIN (texte conditionnel réutilisable) */
+.hd-droitier, .hd-gaucher { display: none; }
+[data-hand="droitier"] .hd-droitier { display: inline; }
+[data-hand="gaucher"] .hd-gaucher { display: inline; }
+
+/* SCHÉMA DU TRIANGLE DE QUILLES */
+.pin-diagram {
+  background: var(--blanc);
+  border: 1px solid #e6e9ef;
+  border-radius: var(--radius);
+  box-shadow: 0 4px 16px rgba(11,29,58,0.07);
+  padding: 24px;
+  max-width: 420px;
+  margin: 32px auto;
+  text-align: center;
+}
+
+.pin-toggle {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+.pin-btn {
+  background: #eef1f6;
+  border: none;
+  color: var(--gris);
+  font-weight: 600;
+  font-size: 0.82rem;
+  padding: 7px 16px;
+  border-radius: 50px;
+  cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+
+.pin-btn.active { background: var(--bleu-piste); color: var(--blanc); }
+
+.pin-diagram:not([data-mode="pocket"]) .hand-toggle { display: none; }
+
+.pin-diagram svg { width: 100%; max-width: 220px; margin: 0 auto 14px; display: block; }
+
+.pin-diagram .pin { fill: #9fb0c9; transition: fill 0.2s ease; }
+.pin-diagram .pin-number { font-size: 9px; fill: #fff; text-anchor: middle; pointer-events: none; }
+
+.pin-diagram[data-mode="pocket"][data-hand="droitier"] .pin[data-pin="1"],
+.pin-diagram[data-mode="pocket"][data-hand="droitier"] .pin[data-pin="3"],
+.pin-diagram[data-mode="pocket"][data-hand="gaucher"] .pin[data-pin="1"],
+.pin-diagram[data-mode="pocket"][data-hand="gaucher"] .pin[data-pin="2"],
+.pin-diagram[data-mode="kingpin"] .pin[data-pin="5"],
+.pin-diagram[data-mode="split"] .pin[data-pin="7"],
+.pin-diagram[data-mode="split"] .pin[data-pin="10"] {
+  fill: var(--orange);
+}
+
+.pin-caption { margin: 0; color: var(--gris); font-size: 0.9rem; }
+.pin-caption span { display: none; }
+.pin-diagram[data-mode="pocket"] .pc-pocket,
+.pin-diagram[data-mode="kingpin"] .pc-kingpin,
+.pin-diagram[data-mode="split"] .pc-split {
+  display: inline;
+}
+
+/* SCHÉMA UNIQUE (ex. visée des flèches) */
+.single-diagram {
+  background: var(--blanc);
+  border: 1px solid #e6e9ef;
+  border-radius: var(--radius);
+  box-shadow: 0 4px 16px rgba(11,29,58,0.07);
+  padding: 24px;
+  max-width: 420px;
+  margin: 32px auto;
+  text-align: center;
+}
+
+.single-diagram svg { width: 100%; max-width: 220px; margin: 0 auto 14px; display: block; }
+
+.aim-arrow polygon { fill: #9fb0c9; transition: fill 0.2s ease; }
+[data-hand="droitier"] .aim-arrow[data-arrow="6"] polygon,
+[data-hand="gaucher"] .aim-arrow[data-arrow="2"] polygon {
+  fill: var(--orange);
+}
+
+.sight-line { display: none; }
+[data-hand="droitier"] .sight-droitier,
+[data-hand="gaucher"] .sight-gaucher {
+  display: block;
+}
+
+/* FRISE CHRONOLOGIQUE (histoire.html) */
+.timeline {
+  max-width: 700px;
+  margin: 32px auto;
+  list-style: none;
+  padding: 0;
+  border-left: 3px solid var(--bleu-piste);
+}
+
+.timeline li {
+  position: relative;
+  padding: 0 0 26px 28px;
+}
+
+.timeline li::before {
+  content: "";
+  position: absolute;
+  left: -9px;
+  top: 2px;
+  width: 15px;
+  height: 15px;
+  border-radius: 50%;
+  background: var(--orange);
+  border: 3px solid var(--blanc);
+  box-shadow: 0 0 0 2px var(--bleu-piste);
+}
+
+.timeline-date {
+  display: block;
+  font-weight: 800;
+  color: var(--bleu-piste);
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 4px;
+}
+
+.timeline li p { margin: 0; color: var(--gris); }
+.timeline li:last-child { padding-bottom: 0; }
+
+/* JAUGE DE POIDS DE BOULE (materiel.html) */
+.weight-tool {
+  background: var(--blanc);
+  border: 1px solid #e6e9ef;
+  border-radius: var(--radius);
+  box-shadow: 0 4px 16px rgba(11,29,58,0.07);
+  padding: 24px;
+  max-width: 480px;
+  margin: 24px auto;
+}
+
+.weight-tool label {
+  display: block;
+  font-weight: 600;
+  font-size: 0.9rem;
+  color: var(--gris);
+  margin-bottom: 8px;
+}
+
+.weight-tool input {
+  width: 100%;
+  padding: 12px 14px;
+  border: 1px solid #d6dae3;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-family: inherit;
+  margin-bottom: 18px;
+}
+
+.weight-tool input:focus {
+  outline: none;
+  border-color: var(--orange);
+  box-shadow: 0 0 0 3px rgba(255,107,53,0.15);
+}
+
+.weight-gauge-track {
+  position: relative;
+  height: 10px;
+  background: #eef1f6;
+  border-radius: 50px;
+  margin-bottom: 6px;
+}
+
+.weight-gauge-fill {
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 100%;
+  width: 0%;
+  background: var(--orange);
+  border-radius: 50px;
+  transition: width 0.2s ease;
+}
+
+.weight-gauge-marker {
+  position: absolute;
+  top: -4px;
+  left: 0%;
+  width: 18px;
+  height: 18px;
+  margin-left: -9px;
+  background: var(--bleu-nuit);
+  border: 3px solid var(--blanc);
+  border-radius: 50%;
+  box-shadow: 0 1px 4px rgba(11,29,58,0.3);
+  transition: left 0.2s ease;
+}
+
+.weight-gauge-scale {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.78rem;
+  color: var(--gris);
+  margin-bottom: 16px;
+}
+
+.weight-result {
+  margin: 0;
+  font-weight: 600;
+  color: var(--bleu-piste);
+  text-align: center;
+}
+
+/* CALCULATEUR DE SCORE INTERACTIF (regles.html) */
+.score-calc {
+  background: var(--blanc);
+  border: 1px solid #e6e9ef;
+  border-radius: var(--radius);
+  box-shadow: 0 4px 16px rgba(11,29,58,0.07);
+  padding: 24px;
+  margin: 32px auto;
+  max-width: 100%;
+  overflow-x: auto;
+}
+
+.score-calc-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 18px;
+  min-width: 640px;
+}
+
+.score-calc-table th, .score-calc-table td {
+  border: 1px solid #e6e9ef;
+  text-align: center;
+  padding: 6px 4px;
+  font-size: 0.85rem;
+}
+
+.score-calc-table th { background: #f4f6fa; color: var(--bleu-nuit); }
+.score-calc-table .score-calc-rolls-cell { font-weight: 600; color: var(--bleu-piste); min-height: 1.2em; }
+.score-calc-table .score-calc-total-cell { font-weight: 800; color: var(--orange); }
+.score-calc-table td.current-frame { background: #fff4e8; }
+
+.score-calc-input {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 10px;
+}
+
+.score-calc-input label { font-weight: 600; font-size: 0.9rem; color: var(--gris); }
+
+.score-calc-input input {
+  width: 80px;
+  padding: 10px 12px;
+  border: 1px solid #d6dae3;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-family: inherit;
+}
+
+.score-calc-input input:focus {
+  outline: none;
+  border-color: var(--orange);
+  box-shadow: 0 0 0 3px rgba(255,107,53,0.15);
+}
+
+.score-calc-msg { margin: 0; font-weight: 600; color: var(--bleu-piste); min-height: 1.2em; }
+.score-calc-msg.form-msg-error { color: var(--rouge); }

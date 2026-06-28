@@ -46,10 +46,11 @@ document.addEventListener("DOMContentLoaded", function () {
   };
 
   document.querySelectorAll(".hand-toggle").forEach(function (toggleGroup) {
-    var card = toggleGroup.closest(".diagram-card");
+    var card = toggleGroup.closest("[data-hand]");
     if (!card) return;
     var svg = card.querySelector("svg");
     var desc = card.querySelector(".hand-desc");
+    var feet = card.querySelectorAll(".foot-side");
 
     toggleGroup.querySelectorAll(".hand-btn").forEach(function (btn) {
       btn.addEventListener("click", function () {
@@ -61,31 +62,277 @@ document.addEventListener("DOMContentLoaded", function () {
         });
         card.setAttribute("data-hand", hand);
 
-        card.querySelectorAll(".foot-side").forEach(function (el) {
-          var step = el.getAttribute("data-step");
-          var x = handX[hand][step];
-          el.textContent = x === 80 ? "G" : "D";
-          el.setAttribute("x", x);
-        });
-
-        card.querySelectorAll(".foot, .foot-number").forEach(function (el) {
-          var step = el.getAttribute("data-step");
-          var x = handX[hand][step];
-          if (el.tagName === "circle") {
-            el.setAttribute("cx", x);
-          } else {
+        if (feet.length) {
+          feet.forEach(function (el) {
+            var step = el.getAttribute("data-step");
+            var x = handX[hand][step];
+            el.textContent = x === 80 ? "G" : "D";
             el.setAttribute("x", x);
+          });
+
+          card.querySelectorAll(".foot, .foot-number").forEach(function (el) {
+            var step = el.getAttribute("data-step");
+            var x = handX[hand][step];
+            if (el.tagName === "circle") {
+              el.setAttribute("cx", x);
+            } else {
+              el.setAttribute("x", x);
+            }
+          });
+
+          if (desc) { desc.textContent = handDesc[hand]; }
+
+          if (svg) {
+            svg.setAttribute("aria-label", "Schéma vu de dessus des 4 pas d'approche pour " + handLabel[hand] + ", du départ jusqu'à la ligne de faute");
           }
-        });
-
-        if (desc) { desc.textContent = handDesc[hand]; }
-
-        if (svg) {
-          svg.setAttribute("aria-label", "Schéma vu de dessus des 4 pas d'approche pour " + handLabel[hand] + ", du départ jusqu'à la ligne de faute");
         }
       });
     });
   });
+
+  document.querySelectorAll(".pin-diagram").forEach(function (diagram) {
+    var toggle = diagram.querySelector(".pin-toggle");
+    if (!toggle) return;
+    toggle.querySelectorAll(".pin-btn").forEach(function (btn) {
+      btn.addEventListener("click", function () {
+        var mode = btn.getAttribute("data-mode-value");
+        if (diagram.getAttribute("data-mode") === mode) return;
+        toggle.querySelectorAll(".pin-btn").forEach(function (b) {
+          b.classList.toggle("active", b === btn);
+        });
+        diagram.setAttribute("data-mode", mode);
+      });
+    });
+  });
+
+  var weightInput = document.getElementById("weight-input");
+  if (weightInput) {
+    var weightFill = document.getElementById("weight-gauge-fill");
+    var weightMarker = document.getElementById("weight-gauge-marker");
+    var weightResult = document.getElementById("weight-result");
+    var MIN_LBS = 6, MAX_LBS = 16;
+
+    weightInput.addEventListener("input", function () {
+      var kg = parseFloat(weightInput.value);
+      if (!kg || kg <= 0) {
+        weightResult.textContent = "Indiquez votre poids pour voir une suggestion.";
+        weightFill.style.width = "0%";
+        weightMarker.style.left = "0%";
+        return;
+      }
+      var lbs = Math.round(kg * 0.2205);
+      if (lbs < MIN_LBS) lbs = MIN_LBS;
+      if (lbs > MAX_LBS) lbs = MAX_LBS;
+      var pct = ((lbs - MIN_LBS) / (MAX_LBS - MIN_LBS)) * 100;
+      weightFill.style.width = pct + "%";
+      weightMarker.style.left = pct + "%";
+      var approxKg = Math.round(lbs * 0.4536 * 10) / 10;
+      weightResult.textContent = "Boule recommandée : environ " + lbs + " livres (≈ " + approxKg + " kg).";
+    });
+  }
+
+  var scoreCalc = document.getElementById("score-calc");
+  if (scoreCalc) {
+    var calcPinsInput = document.getElementById("score-calc-pins");
+    var calcRollBtn = document.getElementById("score-calc-roll");
+    var calcResetBtn = document.getElementById("score-calc-reset");
+    var calcMsg = document.getElementById("score-calc-msg");
+    var calcFramesRow = document.getElementById("score-calc-frames");
+    var calcRollsRow = document.getElementById("score-calc-rolls");
+    var calcTotalsRow = document.getElementById("score-calc-totals");
+
+    var frames = [];
+
+    function setCalcMsg(text, isError) {
+      calcMsg.textContent = text;
+      calcMsg.classList.toggle("form-msg-error", !!isError);
+    }
+
+    function newGame() {
+      frames = [];
+      for (var i = 0; i < 10; i++) {
+        frames.push({ rolls: [] });
+      }
+      setCalcMsg("Frame 1 : il reste 10 quille(s) à viser sur ce lancer.", false);
+      calcPinsInput.value = "";
+    }
+    newGame();
+
+    function currentFrameIndex() {
+      for (var i = 0; i < 10; i++) {
+        if (!frameComplete(i)) return i;
+      }
+      return -1;
+    }
+
+    function frameComplete(i) {
+      var rolls = frames[i].rolls;
+      if (i < 9) {
+        if (rolls.length === 1 && rolls[0] === 10) return true;
+        return rolls.length >= 2;
+      }
+      if (rolls.length < 2) return false;
+      if (rolls.length === 2) {
+        return rolls[0] !== 10 && rolls[0] + rolls[1] < 10;
+      }
+      return true;
+    }
+
+    function pinsRemaining(i) {
+      var rolls = frames[i].rolls;
+      if (i < 9) {
+        if (rolls.length === 0) return 10;
+        return 10 - rolls[0];
+      }
+      if (rolls.length === 0) return 10;
+      if (rolls.length === 1) {
+        return rolls[0] === 10 ? 10 : 10 - rolls[0];
+      }
+      if (rolls[0] === 10) {
+        return rolls[1] === 10 ? 10 : 10 - rolls[1];
+      }
+      if (rolls[0] + rolls[1] === 10) return 10;
+      return 0;
+    }
+
+    function frameScore(i) {
+      var rolls = frames[i].rolls;
+      if (i < 9) {
+        if (rolls.length === 1 && rolls[0] === 10) {
+          var n1 = nextRolls(i, 2);
+          if (n1.length < 2) return null;
+          return 10 + n1[0] + n1[1];
+        }
+        if (rolls.length === 2 && rolls[0] + rolls[1] === 10) {
+          var n2 = nextRolls(i, 1);
+          if (n2.length < 1) return null;
+          return 10 + n2[0];
+        }
+        if (rolls.length === 2) return rolls[0] + rolls[1];
+        return null;
+      }
+      if (frameComplete(9)) {
+        return rolls.reduce(function (sum, r) { return sum + r; }, 0);
+      }
+      return null;
+    }
+
+    function nextRolls(i, count) {
+      var result = [];
+      for (var f = i + 1; f < 10 && result.length < count; f++) {
+        frames[f].rolls.forEach(function (r) {
+          if (result.length < count) result.push(r);
+        });
+      }
+      return result;
+    }
+
+    function totalScore() {
+      var total = 0;
+      for (var i = 0; i < 10; i++) {
+        var fs = frameScore(i);
+        if (fs === null) return null;
+        total += fs;
+      }
+      return total;
+    }
+
+    function render() {
+      calcFramesRow.innerHTML = "";
+      calcRollsRow.innerHTML = "";
+      calcTotalsRow.innerHTML = "";
+
+      var current = currentFrameIndex();
+      var running = 0;
+      var brokenAt = -1;
+
+      for (var i = 0; i < 10; i++) {
+        var th = document.createElement("th");
+        th.textContent = i + 1;
+        calcFramesRow.appendChild(th);
+
+        var rollsTd = document.createElement("td");
+        rollsTd.className = "score-calc-rolls-cell";
+        if (i === current) rollsTd.classList.add("current-frame");
+        rollsTd.textContent = formatRolls(i);
+        calcRollsRow.appendChild(rollsTd);
+
+        var totalTd = document.createElement("td");
+        totalTd.className = "score-calc-total-cell";
+        if (i === current) totalTd.classList.add("current-frame");
+        var fs = frameScore(i);
+        if (fs !== null && brokenAt === -1) {
+          running += fs;
+          totalTd.textContent = running;
+        } else {
+          if (brokenAt === -1) brokenAt = i;
+          totalTd.textContent = "";
+        }
+        calcTotalsRow.appendChild(totalTd);
+      }
+    }
+
+    function formatRolls(i) {
+      var rolls = frames[i].rolls;
+      if (rolls.length === 0) return "";
+      if (i < 9) {
+        if (rolls.length === 1 && rolls[0] === 10) return "X";
+        if (rolls.length === 2) {
+          var second = rolls[0] + rolls[1] === 10 ? "/" : (rolls[1] === 0 ? "-" : rolls[1]);
+          var first = rolls[0] === 0 ? "-" : rolls[0];
+          return first + " " + second;
+        }
+        return rolls[0] === 0 ? "-" : String(rolls[0]);
+      }
+      var labels = rolls.map(function (r, idx) {
+        if (r === 10) return "X";
+        if (idx > 0 && rolls[idx - 1] !== 10 && rolls[idx - 1] + r === 10) return "/";
+        return r === 0 ? "-" : String(r);
+      });
+      return labels.join(" ");
+    }
+
+    calcRollBtn.addEventListener("click", function () {
+      var i = currentFrameIndex();
+      if (i === -1) {
+        setCalcMsg("Partie terminée ! Cliquez sur « Recommencer » pour rejouer.", false);
+        return;
+      }
+      var pins = parseInt(calcPinsInput.value, 10);
+      var max = pinsRemaining(i);
+      if (isNaN(pins) || pins < 0 || pins > 10) {
+        setCalcMsg("Indiquez un nombre de quilles entre 0 et 10.", true);
+        return;
+      }
+      if (pins > max) {
+        setCalcMsg("Il ne reste que " + max + " quille(s) debout sur ce lancer.", true);
+        return;
+      }
+      frames[i].rolls.push(pins);
+      calcPinsInput.value = "";
+      i = currentFrameIndex();
+      if (i === -1) {
+        setCalcMsg("Partie terminée ! Score final : " + totalScore() + ". Cliquez sur « Recommencer » pour rejouer.", false);
+      } else {
+        setCalcMsg("Frame " + (i + 1) + " : il reste " + pinsRemaining(i) + " quille(s) à viser sur ce lancer.", false);
+      }
+      render();
+    });
+
+    calcPinsInput.addEventListener("keydown", function (e) {
+      if (e.key === "Enter") {
+        e.preventDefault();
+        calcRollBtn.click();
+      }
+    });
+
+    calcResetBtn.addEventListener("click", function () {
+      newGame();
+      render();
+    });
+
+    render();
+  }
 
   var scoreForm = document.getElementById("score-form");
   if (scoreForm) {
