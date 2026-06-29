@@ -287,13 +287,14 @@ nav.main-nav a.active { color: var(--orange); }
 }
 
 @keyframes ballHook {
-  0%   { left:67%; bottom: 4%;  transform: scale(1.05) rotate(0deg);   opacity: 1; }
-  18%  { left:64%; bottom:16%;  transform: scale(0.91) rotate(165deg); opacity: 1; }
-  34%  { left:60%; bottom:29%;  transform: scale(0.78) rotate(355deg); opacity: 1; }
-  50%  { left:52%; bottom:41%;  transform: scale(0.65) rotate(548deg); opacity: 1; }
-  57%  { left:45%; bottom:55%;  transform: scale(0.54) rotate(660deg); opacity: 1; }
-  63%  { left:44%; bottom:64%;  transform: scale(0.43) rotate(780deg); opacity: 0; }
-  100% { left:44%; bottom:64%;  transform: scale(0.43) rotate(780deg); opacity: 0; }
+  /* droitier: part gauche, roulé presque droit, crochet tardif et abrupt vers le pocket 1-3 */
+  0%   { left:36%; bottom: 4%;  transform: scale(1.05) rotate(0deg);   opacity: 1; }
+  15%  { left:37%; bottom:14%;  transform: scale(0.93) rotate(160deg); opacity: 1; }
+  32%  { left:37%; bottom:26%;  transform: scale(0.81) rotate(342deg); opacity: 1; }
+  50%  { left:38%; bottom:39%;  transform: scale(0.67) rotate(535deg); opacity: 1; }
+  58%  { left:56%; bottom:52%;  transform: scale(0.55) rotate(660deg); opacity: 1; }
+  64%  { left:57%; bottom:62%;  transform: scale(0.43) rotate(778deg); opacity: 0; }
+  100% { left:57%; bottom:62%;  transform: scale(0.43) rotate(778deg); opacity: 0; }
 }
 
 @media (prefers-reduced-motion: reduce) {
