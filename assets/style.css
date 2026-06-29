@@ -831,13 +831,13 @@ details.faq-item p { margin: 0 0 18px; color: var(--gris); }
 .timeline li::before {
   content: "";
   position: absolute;
-  left: -29px;
+  left: -38px;
   top: 24px;
   transform: translateY(-50%);
-  width: 16px;
-  height: 16px;
+  width: 30px;
+  height: 30px;
   border-radius: 50%;
-  background: var(--orange);
+  background: var(--orange) url("logo-icon.svg") center/140% no-repeat;
   border: 3px solid var(--blanc);
   box-shadow: 0 0 0 2px var(--bleu-piste);
   z-index: 2;
@@ -873,20 +873,20 @@ details.faq-item p { margin: 0 0 18px; color: var(--gris); }
   .timeline li:nth-child(even) { margin-left: calc(50% + 40px); }
 
   .timeline li::before { left: auto; }
-  .timeline li:nth-child(odd)::before { right: -48px; }
-  .timeline li:nth-child(even)::before { left: -48px; }
+  .timeline li:nth-child(odd)::before { right: -55px; }
+  .timeline li:nth-child(even)::before { left: -55px; }
 
   .timeline li::after {
     content: "";
     position: absolute;
     top: 24px;
     transform: translateY(-50%);
-    width: 32px;
+    width: 25px;
     height: 3px;
     background: var(--bleu-piste);
   }
-  .timeline li:nth-child(odd)::after { right: -40px; }
-  .timeline li:nth-child(even)::after { left: -40px; }
+  .timeline li:nth-child(odd)::after { right: -25px; }
+  .timeline li:nth-child(even)::after { left: -25px; }
 }
 
 /* JAUGE DE POIDS DE BOULE (materiel.html) */
