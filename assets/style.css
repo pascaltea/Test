@@ -196,6 +196,16 @@ p.section-sub {
   gap: 24px;
 }
 
+.grid-quad {
+  grid-template-columns: repeat(2, 1fr);
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+@media (max-width: 600px) {
+  .grid-quad { grid-template-columns: 1fr; }
+}
+
 .card {
   background: var(--blanc);
   border-radius: var(--radius);
