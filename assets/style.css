@@ -536,6 +536,15 @@ details.faq-item p { margin: 0 0 18px; color: var(--gris); }
 .resource-category { margin-top: 50px; margin-bottom: 6px; text-align: center; }
 .resource-category:first-of-type { margin-top: 0; }
 
+.affiliate-disclosure {
+  font-size: 0.85rem;
+  color: var(--gris);
+  background: #f3f5f8;
+  border-radius: var(--radius);
+  padding: 12px 16px;
+  margin: 8px 0 24px;
+}
+
 /* ACTUALITÉS */
 .actu-card { border-top: 4px solid var(--orange); }
 .actu-card.bleu { border-top-color: var(--bleu-piste); }
