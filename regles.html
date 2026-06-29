@@ -143,15 +143,17 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     <h3>Testez le calcul vous-même</h3>
     <p>Indiquez le nombre de quilles tombées à chaque lancer : le score se calcule automatiquement, frame par frame, avec les bonus de strike et de spare.</p>
     <div class="score-calc" id="score-calc">
-      <table class="score-calc-table">
-        <thead>
-          <tr id="score-calc-frames"></tr>
-        </thead>
-        <tbody>
-          <tr id="score-calc-rolls"></tr>
-          <tr id="score-calc-totals"></tr>
-        </tbody>
-      </table>
+      <div class="score-calc-table-wrap" id="score-calc-table-wrap">
+        <table class="score-calc-table">
+          <thead>
+            <tr id="score-calc-frames"></tr>
+          </thead>
+          <tbody>
+            <tr id="score-calc-rolls"></tr>
+            <tr id="score-calc-totals"></tr>
+          </tbody>
+        </table>
+      </div>
       <div class="score-calc-input">
         <label for="score-calc-pins">Quilles tombées à ce lancer</label>
         <input type="number" id="score-calc-pins" min="0" max="10" step="1">

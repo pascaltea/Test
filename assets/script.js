@@ -140,6 +140,7 @@ document.addEventListener("DOMContentLoaded", function () {
     var calcFramesRow = document.getElementById("score-calc-frames");
     var calcRollsRow = document.getElementById("score-calc-rolls");
     var calcTotalsRow = document.getElementById("score-calc-totals");
+    var calcTableWrap = document.getElementById("score-calc-table-wrap");
 
     var frames = [];
 
@@ -284,6 +285,13 @@ document.addEventListener("DOMContentLoaded", function () {
           totalTd.textContent = "";
         }
         calcTotalsRow.appendChild(totalTd);
+      }
+
+      var currentTh = calcFramesRow.children[current];
+      if (currentTh && calcTableWrap) {
+        var wrapWidth = calcTableWrap.clientWidth;
+        var target = currentTh.offsetLeft - (wrapWidth - currentTh.offsetWidth) / 2;
+        calcTableWrap.scrollLeft = Math.max(0, target);
       }
     }
 

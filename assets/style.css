@@ -885,14 +885,17 @@ details.faq-item p { margin: 0 0 18px; color: var(--gris); }
   padding: 24px;
   margin: 32px auto;
   max-width: 100%;
+}
+
+.score-calc-table-wrap {
   overflow-x: auto;
+  margin-bottom: 18px;
 }
 
 .score-calc-table {
   width: 100%;
   table-layout: fixed;
   border-collapse: collapse;
-  margin-bottom: 18px;
   min-width: 640px;
 }
 
