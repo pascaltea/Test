@@ -171,6 +171,117 @@ nav.main-nav a.active { color: var(--orange); }
   justify-content: center;
 }
 
+/* SCÈNE 3D DU HERO (boule + quilles) */
+.bowling-scene {
+  position: relative;
+  width: min(92%, 440px);
+  height: 200px;
+  margin: 50px auto 0;
+  perspective: 650px;
+}
+
+.lane-3d {
+  position: absolute;
+  left: 50%;
+  bottom: 0;
+  width: 78%;
+  height: 230px;
+  transform: translateX(-50%) rotateX(50deg);
+  transform-origin: bottom center;
+  transform-style: preserve-3d;
+}
+
+.lane-floor {
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(90deg, #c99a63 0 9%, #b9824f 9% 18%);
+  border-radius: 8px;
+  box-shadow: 0 0 0 8px #6b4226 inset;
+}
+
+.foul-line {
+  position: absolute;
+  left: 5%;
+  right: 5%;
+  bottom: 16px;
+  height: 3px;
+  background: var(--rouge);
+  opacity: 0.85;
+}
+
+.pins-3d {
+  position: absolute;
+  inset: 0;
+}
+
+.pin {
+  position: absolute;
+  width: 11px;
+  height: 24px;
+  margin: -24px 0 0 -5.5px;
+  background: var(--blanc);
+  border: 1px solid #d8dbe2;
+  border-radius: 50% 50% 20% 20% / 60% 60% 14% 14%;
+  box-shadow: 0 2px 3px rgba(11, 29, 58, 0.25);
+  animation: pinFall 5s infinite;
+}
+
+.pin::before {
+  content: "";
+  position: absolute;
+  left: 1px;
+  right: 1px;
+  top: 7px;
+  height: 3px;
+  background: var(--rouge);
+}
+
+.pin:nth-child(1) { animation-delay: 0.25s; --dx: 0px;   --dy: -28px; --rot: 86deg; }
+.pin:nth-child(2) { animation-delay: 0.40s; --dx: -22px; --dy: -18px; --rot: -100deg; }
+.pin:nth-child(3) { animation-delay: 0.40s; --dx: 22px;  --dy: -18px; --rot: 100deg; }
+.pin:nth-child(4) { animation-delay: 0.55s; --dx: -34px; --dy: -8px;  --rot: -120deg; }
+.pin:nth-child(5) { animation-delay: 0.55s; --dx: 4px;   --dy: -22px; --rot: 95deg; }
+.pin:nth-child(6) { animation-delay: 0.55s; --dx: 34px;  --dy: -8px;  --rot: 120deg; }
+.pin:nth-child(7) { animation-delay: 0.70s; --dx: -40px; --dy: 0px;   --rot: -140deg; }
+.pin:nth-child(8) { animation-delay: 0.70s; --dx: -14px; --dy: -10px; --rot: -90deg; }
+.pin:nth-child(9) { animation-delay: 0.70s; --dx: 14px;  --dy: -10px; --rot: 90deg; }
+.pin:nth-child(10){ animation-delay: 0.70s; --dx: 40px;  --dy: 0px;   --rot: 140deg; }
+
+@keyframes pinFall {
+  0%, 50% { opacity: 1; transform: translate(0, 0) rotate(0deg); }
+  60%     { opacity: 0; transform: translate(var(--dx), var(--dy)) rotate(var(--rot)); }
+  100%    { opacity: 0; transform: translate(var(--dx), var(--dy)) rotate(var(--rot)); }
+}
+
+.ball-3d {
+  position: absolute;
+  left: 50%;
+  bottom: 4%;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: var(--orange) url("logo-icon.svg") center/140% no-repeat;
+  box-shadow: 0 3px 6px rgba(11, 29, 58, 0.35);
+  transform: translate(-50%, 0) scale(1) rotate(0deg);
+  animation: ballRoll 5s infinite cubic-bezier(0.3, 0.6, 0.5, 1);
+}
+
+@keyframes ballRoll {
+  0%   { bottom: 4%;  opacity: 1; transform: translate(-50%, 0) scale(1)    rotate(0deg); }
+  55%  { bottom: 56%; opacity: 1; transform: translate(-50%, 0) scale(0.55) rotate(860deg); }
+  64%  { bottom: 80%; opacity: 0; transform: translate(-50%, 0) scale(0.4)  rotate(1020deg); }
+  100% { bottom: 80%; opacity: 0; transform: translate(-50%, 0) scale(0.4)  rotate(1020deg); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pin, .ball-3d { animation: none; }
+}
+
+@media (max-width: 480px) {
+  .bowling-scene { height: 160px; margin-top: 36px; }
+  .lane-3d { height: 130px; }
+}
+
 /* SECTIONS GENERIC */
 section { padding: 60px 0; }
 
