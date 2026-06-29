@@ -419,6 +419,42 @@ footer .footer-links {
   color: var(--blanc);
 }
 
+.throw-toggle {
+  display: inline-flex;
+  background: #eef1f6;
+  border-radius: 50px;
+  padding: 3px;
+  margin-bottom: 14px;
+  margin-left: 8px;
+}
+
+.throw-btn {
+  background: transparent;
+  border: none;
+  color: var(--gris);
+  font-weight: 600;
+  font-size: 0.82rem;
+  padding: 6px 16px;
+  border-radius: 50px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+
+.throw-btn.active {
+  background: var(--bleu-piste);
+  color: var(--blanc);
+}
+
+.throw-desc span { display: none; }
+[data-throw="straight"] .throw-desc-straight,
+[data-throw="hook"] .throw-desc-hook {
+  display: inline;
+}
+
+.wrist-flip { transform-box: view-box; transform-origin: 100px 100px; transition: transform 0.2s ease; }
+[data-hand="gaucher"] .wrist-flip { transform: scale(-1, 1); }
+
 .foot-side { font-weight: 700; }
 
 .diagram-card.paused .foot,

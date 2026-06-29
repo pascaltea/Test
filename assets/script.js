@@ -105,6 +105,23 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   });
 
+  document.querySelectorAll(".diagram-card[data-throw]").forEach(function (card) {
+    var toggle = card.querySelector(".throw-toggle");
+    var path = card.querySelector("#traj");
+    if (!toggle || !path) return;
+    toggle.querySelectorAll(".throw-btn").forEach(function (btn) {
+      btn.addEventListener("click", function () {
+        var mode = btn.getAttribute("data-throw-value");
+        if (card.getAttribute("data-throw") === mode) return;
+        toggle.querySelectorAll(".throw-btn").forEach(function (b) {
+          b.classList.toggle("active", b === btn);
+        });
+        card.setAttribute("data-throw", mode);
+        path.setAttribute("d", path.getAttribute("data-" + mode));
+      });
+    });
+  });
+
   var weightInput = document.getElementById("weight-input");
   if (weightInput) {
     var weightFill = document.getElementById("weight-gauge-fill");
