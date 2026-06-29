@@ -121,7 +121,39 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
     <div class="callout" style="max-width:760px;margin:24px auto 0;">
       <strong>Et le hook, c'est pour quand ?</strong><br>
-      Tant que votre lancer droit n'est pas régulier, ne vous souciez pas du hook : il ajoute plusieurs variables (rotation, vitesse, point de visée) qui rendent vos erreurs difficiles à corriger. Une fois le lancer droit maîtrisé, direction la section <a href="#hook">Aller plus loin : le hook</a> plus bas sur cette page.
+      Tant que votre lancer droit n'est pas régulier, ne vous souciez pas du hook : il ajoute plusieurs variables (rotation, vitesse, point de départ) qui rendent vos erreurs difficiles à corriger. Une fois le lancer droit maîtrisé, direction la section <a href="#hook">Aller plus loin : le hook</a> juste ci-dessous.
+    </div>
+  </div>
+</section>
+
+<section id="hook">
+  <div class="container content-block">
+    <h2>Aller plus loin : le hook</h2>
+    <p>Le hook n'est pas un coup de poignet « en plus » qu'on ajoute au lancer droit : c'est une technique à part, qui demande un lancer droit déjà régulier pour être travaillée sans tout dérégler. Voici ce qui change concrètement par rapport au lancer droit.</p>
+
+    <div class="callout">
+      <strong>1. Le point de départ change, pas forcément la flèche visée</strong><br>
+      Avec un hook, on se positionne plutôt vers le centre de la piste : la boule part à l'intérieur, s'écarte vers la même flèche de référence en milieu de piste, puis revient courber vers le pocket avec un meilleur angle d'attaque. En lancer droit, on se place plus à l'extérieur pour une trajectoire quasiment directe vers ce même repère.
+    </div>
+
+    <div class="callout">
+      <strong>2. La rotation au lâcher</strong><br>
+      Le geste clé, c'est de tourner la main comme pour <strong>tourner une poignée de porte</strong> au moment du lâcher : le pouce sort en premier et pivote vers l'intérieur, les doigts restent dans la boule une fraction de seconde de plus. C'est cette rotation, pas la force, qui fait courber la boule.
+    </div>
+
+    <div class="callout">
+      <strong>3. La vitesse et l'angle d'attaque</strong><br>
+      Une boule qui hook arrive sur les quilles avec un angle plus favorable qu'une boule qui roule tout droit, ce qui augmente les chances de faire tomber toutes les quilles. Mais cet angle dépend d'un bon équilibre entre vitesse et rotation : trop de rotation avec trop peu de vitesse, et la boule courbe trop tôt.
+    </div>
+
+    <div class="callout">
+      <strong>4. Le matériel a son importance</strong><br>
+      Une boule en résine réactive accroche davantage la piste qu'une boule en uréthane ou polyester, ce qui amplifie l'effet du hook. Voir notre page <a href="materiel.html">Le matériel</a> pour le détail des types de boules.
+    </div>
+
+    <div class="callout bleu">
+      <strong>Pas de précipitation</strong><br>
+      Tant que le lancer droit n'est pas fiable, ajouter une rotation ne fera qu'ajouter une variable supplémentaire à corriger. Travaillez d'abord la régularité sans hook, le jour où le lancer droit deviendra trop facile, ce sera le bon moment pour s'y essayer.
     </div>
   </div>
 </section>
@@ -204,7 +236,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
             <circle cx="90" cy="75" r="8" fill="#9fb0c9"/>
             <circle cx="110" cy="75" r="8" fill="#ff6b35"/>
             <circle cx="100" cy="95" r="8" fill="#ff6b35"/>
-            <path id="traj" data-straight="M100,290 L104,90" data-hook="M100,290 Q178,190 104,90" d="M100,290 Q178,190 104,90" fill="none" stroke="#ff6b35" stroke-width="2" stroke-dasharray="4 4" opacity="0.55"/>
+            <path id="traj" data-straight="M160,290 L110,90" data-hook="M100,290 Q178,190 104,90" d="M100,290 Q178,190 104,90" fill="none" stroke="#ff6b35" stroke-width="2" stroke-dasharray="4 4" opacity="0.55"/>
             <circle r="8" fill="#ff6b35">
               <animateMotion dur="2.6s" repeatCount="indefinite" rotate="auto">
                 <mpath href="#traj"></mpath>
@@ -214,7 +246,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         </svg>
         <h3>La trajectoire vers le pocket</h3>
         <p class="throw-desc">
-          <span class="throw-desc-straight">Lancer droit : la boule part du même point et percute directement les quilles 1 et 3 (ou 1 et 2 pour un gaucher), sans courber. Plus simple à maîtriser, c'est la base à travailler en premier.</span>
+          <span class="throw-desc-straight">Lancer droit : on se place plus à l'extérieur de la piste et la boule file en ligne quasiment directe vers les quilles 1 et 3 (ou 1 et 2 pour un gaucher), sans courber. Plus simple à maîtriser, c'est la base à travailler en premier.</span>
           <span class="throw-desc-hook">Une légère courbe (le « hook ») qui passe par les 7 flèches au sol et vient percuter les quilles entre la 1 et la 3 (ou la 1 et la 2 pour un gaucher) avec un meilleur angle d'attaque : c'est le « pocket », la zone idéale pour un strike. Une technique à travailler une fois le lancer droit maîtrisé.</span>
         </p>
         <button class="replay-btn" type="button">⏸ Pause</button>
@@ -241,38 +273,6 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         <button class="replay-btn" type="button">⏸ Pause</button>
       </div>
 
-    </div>
-  </div>
-</section>
-
-<section id="hook">
-  <div class="container content-block">
-    <h2>Aller plus loin : le hook</h2>
-    <p>Le hook n'est pas un coup de poignet « en plus » qu'on ajoute au lancer droit : c'est une technique à part, qui demande un lancer droit déjà régulier pour être travaillée sans tout dérégler. Voici ce qui change concrètement par rapport au lancer droit.</p>
-
-    <div class="callout">
-      <strong>1. Le point de visée change</strong><br>
-      Avec un hook, la boule part plus à l'extérieur (vers la 3ᵉ flèche pour un droitier, la 5ᵉ pour un gaucher) avant de revenir courber vers le pocket. On ne vise donc plus le même repère qu'en lancer droit.
-    </div>
-
-    <div class="callout">
-      <strong>2. La rotation au lâcher</strong><br>
-      Le geste clé, c'est de tourner la main comme pour <strong>tourner une poignée de porte</strong> au moment du lâcher : le pouce sort en premier et pivote vers l'intérieur, les doigts restent dans la boule une fraction de seconde de plus. C'est cette rotation, pas la force, qui fait courber la boule.
-    </div>
-
-    <div class="callout">
-      <strong>3. La vitesse et l'angle d'attaque</strong><br>
-      Une boule qui hook arrive sur les quilles avec un angle plus favorable qu'une boule qui roule tout droit, ce qui augmente les chances de faire tomber toutes les quilles. Mais cet angle dépend d'un bon équilibre entre vitesse et rotation : trop de rotation avec trop peu de vitesse, et la boule courbe trop tôt.
-    </div>
-
-    <div class="callout">
-      <strong>4. Le matériel a son importance</strong><br>
-      Une boule en résine réactive accroche davantage la piste qu'une boule en uréthane ou polyester, ce qui amplifie l'effet du hook. Voir notre page <a href="materiel.html">Le matériel</a> pour le détail des types de boules.
-    </div>
-
-    <div class="callout bleu">
-      <strong>Pas de précipitation</strong><br>
-      Tant que le lancer droit n'est pas fiable, ajouter une rotation ne fera qu'ajouter une variable supplémentaire à corriger. Travaillez d'abord la régularité sans hook, le jour où le lancer droit deviendra trop facile, ce sera le bon moment pour s'y essayer.
     </div>
   </div>
 </section>
