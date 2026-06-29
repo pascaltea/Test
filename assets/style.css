@@ -701,7 +701,7 @@ details.faq-item p { margin: 0 0 18px; color: var(--gris); }
 
 .pin-diagram:not([data-mode="pocket"]) .hand-toggle { display: none; }
 
-.pin-diagram svg { width: 100%; max-width: 300px; margin: 0 auto 14px; display: block; }
+.pin-diagram svg { width: 100%; max-width: 480px; margin: 0 auto 14px; display: block; }
 
 .pin-diagram .pin { fill: #9fb0c9; transition: fill 0.2s ease; }
 .pin-diagram .pin-number { font-size: 9px; fill: #fff; text-anchor: middle; pointer-events: none; }
@@ -736,7 +736,7 @@ details.faq-item p { margin: 0 0 18px; color: var(--gris); }
   text-align: center;
 }
 
-.single-diagram svg { width: 100%; max-width: 300px; margin: 0 auto 14px; display: block; }
+.single-diagram svg { width: 100%; max-width: 480px; margin: 0 auto 14px; display: block; }
 
 .aim-arrow polygon { fill: #9fb0c9; transition: fill 0.2s ease; }
 [data-hand="droitier"] .aim-arrow[data-arrow="6"] polygon,
