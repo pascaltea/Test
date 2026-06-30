@@ -26,17 +26,23 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
 <link rel="shortcut icon" href="favicon.ico">
 <link rel="stylesheet" href="assets/style.css">
-<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+<link rel="stylesheet" href="assets/leaflet.css">
 <style>
-/* Annuaire — styles critiques inline */
+/* === Annuaire page styles === */
 .annuaire-search{background:linear-gradient(135deg,#0b1d3a 0%,#13294b 100%);padding:28px 0}
-.search-row{display:flex;gap:10px;flex-wrap:wrap;align-items:center;max-width:860px;margin:0 auto}
-.search-input{flex:1;min-width:220px;padding:13px 20px;border:none;border-radius:50px;font-size:1rem;font-family:inherit;color:#0b1d3a;outline:none}
+.search-row{display:flex;gap:10px;flex-wrap:wrap;align-items:flex-start;max-width:900px;margin:0 auto}
+.search-input-wrap{position:relative;flex:1;min-width:240px}
+.search-input{width:100%;padding:13px 20px;border:none;border-radius:50px;font-size:1rem;font-family:inherit;color:#0b1d3a;outline:none;box-sizing:border-box}
 .search-input:focus{box-shadow:0 0 0 3px #ff6b35}
-.search-radius{padding:13px 16px;border:2px solid rgba(255,255,255,.35);border-radius:50px;font-size:.9rem;font-family:inherit;background:rgba(255,255,255,.1);color:#f7f7f5;cursor:pointer;outline:none}
+.search-radius{padding:13px 16px;border:2px solid rgba(255,255,255,.35);border-radius:50px;font-size:.9rem;font-family:inherit;background:rgba(255,255,255,.1);color:#f7f7f5;cursor:pointer;outline:none;height:48px}
+.suggest-box{position:absolute;top:calc(100% + 6px);left:0;right:0;background:#fff;border-radius:14px;box-shadow:0 8px 28px rgba(11,29,58,.22);overflow:hidden;z-index:2000;max-height:260px;overflow-y:auto}
+.suggest-item{padding:11px 18px;font-size:.9rem;color:#0b1d3a;cursor:pointer;border-bottom:1px solid #f0f0f0;line-height:1.3}
+.suggest-item:last-child{border-bottom:none}
+.suggest-item:hover,.suggest-item.active{background:#f0f4fa}
+.suggest-item strong{color:#ff6b35;font-weight:600}
 #map-wrap{position:relative;width:100%}
-#map{width:100%;height:480px;background:#dde8f0}
-.map-status{position:absolute;top:14px;left:50%;transform:translateX(-50%);background:rgba(11,29,58,.88);color:#f7f7f5;padding:9px 22px;border-radius:24px;font-size:.9rem;z-index:1000;pointer-events:none;white-space:nowrap}
+#map{width:100%;height:500px;background:#e8eef4}
+.map-status{position:absolute;top:14px;left:50%;transform:translateX(-50%);background:rgba(11,29,58,.88);color:#f7f7f5;padding:9px 22px;border-radius:24px;font-size:.9rem;z-index:1000;pointer-events:none;white-space:nowrap;backdrop-filter:blur(4px)}
 .map-status.hidden{display:none}
 #results-section{padding:40px 0 20px}
 .results-count{text-align:center;color:#5a6472;font-size:.95rem;margin:0 0 24px}
@@ -55,7 +61,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 .osm-credit{font-size:.8rem;color:#aaa;text-align:center;margin-top:32px}
 .marker-user{width:16px;height:16px;border-radius:50%;background:#2563eb;border:3px solid #fff;box-shadow:0 2px 8px rgba(37,99,235,.5)}
 .marker-club{font-size:22px;line-height:1;filter:drop-shadow(0 2px 4px rgba(0,0,0,.3))}
-@media(max-width:640px){#map{height:320px}.search-input{min-width:100%}.btn-sm{margin-left:0}}
+@media(max-width:640px){#map{height:320px}.search-input-wrap{min-width:100%}.btn-sm{margin-left:0}}
 </style>
 </head>
 <body>
@@ -96,7 +102,10 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <div class="annuaire-search">
   <div class="container">
     <div class="search-row">
-      <input id="addr-input" type="text" class="search-input" placeholder="Ville, code postal ou adresse…" autocomplete="off" aria-label="Votre adresse ou ville">
+      <div class="search-input-wrap">
+        <input id="addr-input" type="text" class="search-input" placeholder="Ville, code postal ou adresse…" autocomplete="off" aria-label="Votre adresse ou ville" aria-autocomplete="list" aria-controls="addr-suggestions">
+        <div id="addr-suggestions" class="suggest-box" hidden role="listbox"></div>
+      </div>
       <select id="radius-select" class="search-radius" aria-label="Rayon de recherche">
         <option value="20000">20 km</option>
         <option value="50000" selected>50 km</option>
@@ -111,14 +120,14 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
 <div id="map-wrap">
   <div id="map" aria-label="Carte des bowlings"></div>
-  <div id="map-status" class="map-status" aria-live="polite">Chargement de la carte…</div>
+  <div id="map-status" class="map-status" aria-live="polite">Chargement des bowlings…</div>
 </div>
 
 <section id="results-section">
   <div class="container">
     <p id="results-count" class="results-count"></p>
     <div id="results-list" class="clubs-grid"></div>
-    <p class="osm-credit">Données : <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a> — contributeurs bénévoles. Certains établissements peuvent manquer ou être fermés.</p>
+    <p class="osm-credit">Données : <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a> via Overpass API — contributeurs bénévoles. Certains établissements peuvent manquer ou être fermés.</p>
   </div>
 </section>
 
@@ -140,21 +149,24 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   </div>
 </footer>
 
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="assets/leaflet.min.js"></script>
 <script>
 (function () {
   // ── Map init ──────────────────────────────────────────────────────────────
   const map = L.map('map', { zoomControl: true }).setView([46.5, 2.3], 6);
-  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributeurs',
+
+  // CartoDB Voyager tiles (clean, reliable, no API key needed for low traffic)
+  L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
+    attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> © <a href="https://carto.com/attributions">CARTO</a>',
+    subdomains: 'abcd',
     maxZoom: 19
   }).addTo(map);
 
-  const userIcon = L.divIcon({ html: '<div class="marker-user"></div>', iconSize: [18,18], iconAnchor: [9,9], className: '' });
-  const clubIcon = L.divIcon({ html: '<div class="marker-club">🎳</div>', iconSize: [30,30], iconAnchor: [15,15], className: '' });
+  const userIcon = L.divIcon({ html: '<div class="marker-user"></div>', iconSize:[18,18], iconAnchor:[9,9], className:'' });
+  const clubIcon = L.divIcon({ html: '<div class="marker-club">🎳</div>', iconSize:[30,30], iconAnchor:[15,15], className:'' });
 
-  let allClubs = [];    // all France, loaded on page start
-  let lastClubs = [];   // current filtered list (for focusClub)
+  let allClubs = [];
+  let lastClubs = [];
   let clubMarkers = [];
   let userMarker = null;
 
@@ -166,13 +178,13 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   }
 
   function haversine(lat1, lon1, lat2, lon2) {
-    const R = 6371, r = Math.PI / 180;
-    const dLat = (lat2 - lat1) * r, dLon = (lon2 - lon1) * r;
+    const R = 6371, r = Math.PI/180;
+    const dLat=(lat2-lat1)*r, dLon=(lon2-lon1)*r;
     const a = Math.sin(dLat/2)**2 + Math.cos(lat1*r)*Math.cos(lat2*r)*Math.sin(dLon/2)**2;
     return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
   }
 
-  function fmt(km) { return km < 1 ? Math.round(km*1000)+' m' : km.toFixed(1)+' km'; }
+  function fmt(km) { return km<1 ? Math.round(km*1000)+' m' : km.toFixed(1)+' km'; }
 
   function esc(s) {
     return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
@@ -181,15 +193,15 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   function normalize(el) {
     const lat = el.lat ?? el.center?.lat;
     const lon = el.lon ?? el.center?.lon;
-    return (lat && lon) ? { ...el, _lat: +lat, _lon: +lon } : null;
+    return (lat && lon) ? { ...el, _lat:+lat, _lon:+lon } : null;
   }
 
-  // ── Overpass queries ──────────────────────────────────────────────────────
+  // ── Overpass ──────────────────────────────────────────────────────────────
   async function overpass(q) {
     const r = await fetch('https://overpass-api.de/api/interpreter', {
-      method: 'POST', body: 'data=' + encodeURIComponent(q)
+      method: 'POST', body: 'data='+encodeURIComponent(q)
     });
-    if (!r.ok) throw new Error('Overpass ' + r.status);
+    if (!r.ok) throw new Error('Overpass '+r.status);
     return (await r.json()).elements || [];
   }
 
@@ -201,54 +213,148 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     return overpass(`[out:json][timeout:30];(node["leisure"="bowling_alley"](around:${radius},${lat},${lon});way["leisure"="bowling_alley"](around:${radius},${lat},${lon}););out body center qt;`);
   }
 
-  async function geocodeAddress(addr) {
-    const r = await fetch('https://nominatim.openstreetmap.org/search?q=' + encodeURIComponent(addr) + '&countrycodes=fr&format=json&limit=1&accept-language=fr');
-    const d = await r.json();
-    return d.length ? { lat: +d[0].lat, lon: +d[0].lon } : null;
+  // ── Autocomplete ──────────────────────────────────────────────────────────
+  const addrInput = document.getElementById('addr-input');
+  const suggestBox = document.getElementById('addr-suggestions');
+  let acTimer = null;
+  let acIndex = -1;
+  let acItems = [];
+
+  addrInput.addEventListener('input', () => {
+    clearTimeout(acTimer);
+    const q = addrInput.value.trim();
+    if (q.length < 2) { hideSuggestions(); return; }
+    acTimer = setTimeout(() => loadSuggestions(q), 280);
+  });
+
+  addrInput.addEventListener('keydown', e => {
+    if (e.key === 'ArrowDown') { e.preventDefault(); moveSuggest(1); }
+    else if (e.key === 'ArrowUp') { e.preventDefault(); moveSuggest(-1); }
+    else if (e.key === 'Enter') {
+      if (acIndex >= 0 && acItems[acIndex]) {
+        selectSuggestion(acItems[acIndex]);
+      } else {
+        document.getElementById('btn-search').click();
+      }
+      hideSuggestions();
+    }
+    else if (e.key === 'Escape') { hideSuggestions(); }
+  });
+
+  document.addEventListener('click', e => {
+    if (!addrInput.contains(e.target) && !suggestBox.contains(e.target)) hideSuggestions();
+  });
+
+  async function loadSuggestions(q) {
+    try {
+      const url = 'https://nominatim.openstreetmap.org/search?q='
+        + encodeURIComponent(q)
+        + '&countrycodes=fr&format=json&limit=6&accept-language=fr&addressdetails=1';
+      const r = await fetch(url);
+      const data = await r.json();
+      acItems = data.map(d => ({
+        lat: +d.lat,
+        lon: +d.lon,
+        label: formatSuggestionLabel(d)
+      }));
+      renderSuggestions(q);
+    } catch { hideSuggestions(); }
   }
 
-  // ── Build card HTML ───────────────────────────────────────────────────────
+  function formatSuggestionLabel(d) {
+    const a = d.address || {};
+    const parts = [];
+    if (a.road || a.pedestrian) parts.push(a.house_number ? a.house_number+' '+(a.road||a.pedestrian) : (a.road||a.pedestrian));
+    if (a.city || a.town || a.village || a.municipality) parts.push(a.city||a.town||a.village||a.municipality);
+    if (a.postcode) parts.splice(parts.length > 0 ? parts.length-1 : 0, 0, a.postcode);
+    if (a.county && parts.length < 2) parts.push(a.county);
+    return parts.filter(Boolean).join(', ') || d.display_name.split(',').slice(0,3).join(',');
+  }
+
+  function renderSuggestions(query) {
+    if (!acItems.length) { hideSuggestions(); return; }
+    acIndex = -1;
+    const qLower = query.toLowerCase();
+    suggestBox.innerHTML = acItems.map((item, i) => {
+      const label = esc(item.label);
+      const highlighted = label.replace(new RegExp('('+esc(query).replace(/[.*+?^${}()|[\]\\]/g,'\\$&')+')', 'gi'), '<strong>$1</strong>');
+      return `<div class="suggest-item" role="option" data-i="${i}">${highlighted}</div>`;
+    }).join('');
+    suggestBox.hidden = false;
+
+    suggestBox.querySelectorAll('.suggest-item').forEach(el => {
+      el.addEventListener('mousedown', e => {
+        e.preventDefault();
+        selectSuggestion(acItems[+el.dataset.i]);
+      });
+    });
+  }
+
+  function moveSuggest(dir) {
+    const items = suggestBox.querySelectorAll('.suggest-item');
+    if (!items.length) return;
+    items[acIndex]?.classList.remove('active');
+    acIndex = Math.max(-1, Math.min(acItems.length-1, acIndex+dir));
+    if (acIndex >= 0) {
+      items[acIndex].classList.add('active');
+      addrInput.value = acItems[acIndex].label;
+    }
+  }
+
+  function selectSuggestion(item) {
+    addrInput.value = item.label;
+    hideSuggestions();
+    search(item.lat, item.lon);
+  }
+
+  function hideSuggestions() {
+    suggestBox.hidden = true;
+    acItems = [];
+    acIndex = -1;
+  }
+
+  // ── Card / popup builders ─────────────────────────────────────────────────
   function buildPopup(c) {
-    const t = c.tags || {};
-    const name = t.name || 'Bowling';
-    const city = t['addr:city'] || '';
-    const dist = c._dist != null ? '<br><em>' + fmt(c._dist) + '</em>' : '';
-    return `<strong>${esc(name)}</strong>${city ? '<br>'+esc(city) : ''}${dist}`;
+    const t = c.tags||{};
+    const name = t.name||'Bowling';
+    const city = t['addr:city']||'';
+    const dist = c._dist != null ? '<br><em>'+fmt(c._dist)+'</em>' : '';
+    return `<strong>${esc(name)}</strong>${city?'<br>'+esc(city):''}${dist}`;
   }
 
   function buildCard(c, i) {
-    const t = c.tags || {};
-    const name = t.name || 'Bowling';
-    const hn = t['addr:housenumber'] || '';
-    const street = t['addr:street'] || '';
-    const pc = t['addr:postcode'] || '';
-    const city = t['addr:city'] || '';
-    const phone = t.phone || t['contact:phone'] || '';
-    const website = t.website || t['contact:website'] || '';
-    const hours = t.opening_hours || '';
-    const addr = [hn&&street ? hn+' '+street : street, pc&&city ? pc+' '+city : city].filter(Boolean).join(', ');
+    const t = c.tags||{};
+    const name = t.name||'Bowling';
+    const hn = t['addr:housenumber']||'';
+    const street = t['addr:street']||'';
+    const pc = t['addr:postcode']||'';
+    const city = t['addr:city']||'';
+    const phone = t.phone||t['contact:phone']||'';
+    const website = t.website||t['contact:website']||'';
+    const hours = t.opening_hours||'';
+    const addr = [hn&&street?hn+' '+street:street, pc&&city?pc+' '+city:city].filter(Boolean).join(', ');
 
     return `<div class="club-card" id="club-${i}">
   <div class="club-header">
     <h3 class="club-name">${esc(name)}</h3>
-    ${c._dist != null ? `<span class="club-dist">${fmt(c._dist)}</span>` : ''}
+    ${c._dist!=null?`<span class="club-dist">${fmt(c._dist)}</span>`:''}
   </div>
-  ${addr ? `<p class="club-addr">📍 ${esc(addr)}</p>` : city ? `<p class="club-addr">📍 ${esc(city)}</p>` : ''}
-  ${hours ? `<p class="club-addr">🕐 ${esc(hours)}</p>` : ''}
+  ${addr?`<p class="club-addr">📍 ${esc(addr)}</p>`:city?`<p class="club-addr">📍 ${esc(city)}</p>`:''}
+  ${hours?`<p class="club-addr">🕐 ${esc(hours)}</p>`:''}
   <div class="club-actions">
-    ${phone ? `<a href="tel:${esc(phone)}" class="club-link">📞 ${esc(phone)}</a>` : ''}
-    ${website ? `<a href="${esc(website)}" class="club-link" target="_blank" rel="noopener">🌐 Site web</a>` : ''}
+    ${phone?`<a href="tel:${esc(phone)}" class="club-link">📞 ${esc(phone)}</a>`:''}
+    ${website?`<a href="${esc(website)}" class="club-link" target="_blank" rel="noopener">🌐 Site web</a>`:''}
     <button class="btn-sm" onclick="focusClub(${i})">Voir sur la carte</button>
   </div>
 </div>`;
   }
 
-  // ── Place markers on map ──────────────────────────────────────────────────
+  // ── Place markers ─────────────────────────────────────────────────────────
   function placeMarkers(clubs) {
     clubMarkers.forEach(m => map.removeLayer(m));
     clubMarkers = [];
     clubs.forEach(c => {
-      const m = L.marker([c._lat, c._lon], { icon: clubIcon })
+      const m = L.marker([c._lat,c._lon], { icon:clubIcon })
         .bindPopup(buildPopup(c))
         .addTo(map);
       clubMarkers.push(m);
@@ -268,51 +374,47 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     }
 
     const n = clubs.length;
-    count.textContent = n + ' bowling' + (n>1?'s':'') + ' trouvé' + (n>1?'s':'') + ' — triés par distance';
-    list.innerHTML = clubs.map((c, i) => buildCard(c, i)).join('');
-
+    count.textContent = n+' bowling'+(n>1?'s':'')+' trouvé'+(n>1?'s':'')+' — triés par distance';
+    list.innerHTML = clubs.map((c,i) => buildCard(c,i)).join('');
     placeMarkers(clubs);
 
-    const bounds = userLat != null
-      ? [[userLat, userLon], ...clubs.map(c => [c._lat, c._lon])]
-      : clubs.map(c => [c._lat, c._lon]);
-    map.fitBounds(bounds, { padding: [40,40], maxZoom: 13 });
+    const bounds = [[userLat,userLon], ...clubs.map(c=>[c._lat,c._lon])];
+    map.fitBounds(bounds, { padding:[40,40], maxZoom:13 });
   }
 
-  // ── Search from a given position ──────────────────────────────────────────
+  // ── Search from position ──────────────────────────────────────────────────
   async function search(lat, lon) {
     const radius = +document.getElementById('radius-select').value;
 
     if (userMarker) map.removeLayer(userMarker);
-    userMarker = L.marker([lat, lon], { icon: userIcon })
+    userMarker = L.marker([lat,lon], { icon:userIcon })
       .bindPopup('<strong>Votre position</strong>').addTo(map);
 
     document.getElementById('results-list').innerHTML = '';
 
-    let clubs;
     if (allClubs.length > 0) {
-      clubs = allClubs
+      const clubs = allClubs
         .map(c => ({ ...c, _dist: haversine(lat, lon, c._lat, c._lon) }))
-        .filter(c => c._dist * 1000 <= radius)
-        .sort((a, b) => a._dist - b._dist);
+        .filter(c => c._dist*1000 <= radius)
+        .sort((a,b) => a._dist-b._dist);
+      setStatus(null);
+      renderResults(clubs, lat, lon);
     } else {
       setStatus('Recherche en cours…');
       try {
         const els = await fetchNearby(lat, lon, radius);
-        clubs = els.map(normalize).filter(Boolean)
-          .map(c => ({ ...c, _dist: haversine(lat, lon, c._lat, c._lon) }))
-          .sort((a, b) => a._dist - b._dist);
-      } catch (e) {
+        const clubs = els.map(normalize).filter(Boolean)
+          .map(c => ({ ...c, _dist: haversine(lat,lon,c._lat,c._lon) }))
+          .sort((a,b) => a._dist-b._dist);
+        setStatus(null);
+        renderResults(clubs, lat, lon);
+      } catch {
         setStatus('Erreur de recherche. Réessayez dans quelques instants.');
-        return;
       }
     }
-
-    setStatus(null);
-    renderResults(clubs, lat, lon);
   }
 
-  // ── Page init : load all France ───────────────────────────────────────────
+  // ── Page init ─────────────────────────────────────────────────────────────
   async function init() {
     setStatus('Chargement des bowlings de France…');
     try {
@@ -322,36 +424,34 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       setStatus(null);
       const n = allClubs.length;
       document.getElementById('results-count').textContent =
-        n + ' bowling' + (n>1?'s':'') + ' répertorié' + (n>1?'s':'') + ' en France — entrez votre adresse ou localisez-vous pour voir les plus proches';
-    } catch (e) {
-      setStatus('Impossible de charger les données. Vérifiez votre connexion.');
+        n+' bowling'+(n>1?'s':'')+' répertorié'+(n>1?'s':'')+' en France — entrez votre adresse ou localisez-vous pour trouver les plus proches';
+    } catch {
+      setStatus('Impossible de charger les données. Vérifiez votre connexion internet.');
     }
   }
 
-  // ── Events ────────────────────────────────────────────────────────────────
-  window.focusClub = function (i) {
+  // ── Button events ─────────────────────────────────────────────────────────
+  window.focusClub = function(i) {
     const c = lastClubs[i];
     if (!c) return;
-    map.setView([c._lat, c._lon], 15);
+    map.setView([c._lat,c._lon], 15);
     clubMarkers[i]?.openPopup();
-    document.getElementById('club-'+i)?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    document.getElementById('club-'+i)?.scrollIntoView({ behavior:'smooth', block:'nearest' });
   };
 
   document.getElementById('btn-search').addEventListener('click', async () => {
-    const val = document.getElementById('addr-input').value.trim();
+    const val = addrInput.value.trim();
     if (!val) return;
-    setStatus('Recherche de l\'adresse…');
+    hideSuggestions();
+    setStatus('Géocodage en cours…');
     try {
-      const coords = await geocodeAddress(val);
-      if (!coords) { setStatus('Adresse non trouvée. Essayez un nom de ville ou un code postal.'); return; }
-      await search(coords.lat, coords.lon);
-    } catch (e) {
-      setStatus('Erreur réseau. Vérifiez votre connexion.');
+      const r = await fetch('https://nominatim.openstreetmap.org/search?q='+encodeURIComponent(val)+'&countrycodes=fr&format=json&limit=1&accept-language=fr');
+      const d = await r.json();
+      if (!d.length) { setStatus('Adresse non trouvée. Essayez un nom de ville ou un code postal.'); return; }
+      await search(+d[0].lat, +d[0].lon);
+    } catch {
+      setStatus('Erreur réseau. Vérifiez votre connexion internet.');
     }
-  });
-
-  document.getElementById('addr-input').addEventListener('keydown', e => {
-    if (e.key === 'Enter') document.getElementById('btn-search').click();
   });
 
   document.getElementById('btn-locate').addEventListener('click', () => {
@@ -360,7 +460,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     navigator.geolocation.getCurrentPosition(
       p => search(p.coords.latitude, p.coords.longitude),
       () => setStatus('Position refusée. Autorisez la géolocalisation dans les paramètres du navigateur.'),
-      { timeout: 10000 }
+      { timeout:10000 }
     );
   });
 
