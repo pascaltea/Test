@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<!-- Google Tag Manager -->
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-PDM658GX');</script>
+<!-- End Google Tag Manager -->
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Annuaire des bowlings en France — trouvez le plus proche | BowlingFacile.fr</title>
+<meta name="description" content="Trouvez le bowling le plus proche de chez vous grâce à notre carte interactive. Géolocalisation ou recherche par ville, adresse ou code postal.">
+<link rel="canonical" href="https://bowlingfacile.fr/annuaire.html">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="fr_FR">
+<meta property="og:site_name" content="BowlingFacile.fr">
+<meta property="og:title" content="Annuaire des bowlings en France — trouvez le plus proche">
+<meta property="og:description" content="Carte interactive pour trouver le bowling le plus proche de chez vous. Géolocalisation ou recherche par adresse.">
+<meta property="og:url" content="https://bowlingfacile.fr/annuaire.html">
+<meta name="twitter:card" content="summary">
+<link rel="icon" type="image/svg+xml" href="assets/favicon_couleurs.svg">
+<link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="assets/favicon-16.png">
+<link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+<link rel="shortcut icon" href="favicon.ico">
+<link rel="stylesheet" href="assets/style.css">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
+</head>
+<body>
+<!-- Google Tag Manager (noscript) -->
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-PDM658GX"
+height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<!-- End Google Tag Manager (noscript) -->
+
+<header class="site-header">
+  <div class="nav-bar">
+    <a href="index.html" class="logo"><img src="assets/logo-icon.svg" alt="" class="pin-icon"> Bowling<span>Facile</span></a>
+    <button class="menu-toggle" aria-label="Ouvrir le menu">☰</button>
+    <nav class="main-nav">
+      <ul>
+        <li><a href="index.html">Accueil</a></li>
+        <li><a href="regles.html">Les règles</a></li>
+        <li><a href="technique.html">La technique</a></li>
+        <li><a href="materiel.html">Le matériel</a></li>
+        <li><a href="vocabulaire.html">Vocabulaire</a></li>
+        <li><a href="conseils.html">Conseils</a></li>
+        <li><a href="carnet.html">Mon carnet</a></li>
+        <li><a href="faq.html">FAQ</a></li>
+        <li><a href="histoire.html">Histoire</a></li>
+        <li><a href="ressources.html">Ressources</a></li>
+        <li><a href="annuaire.html" class="active">Annuaire</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<section class="page-hero">
+  <div class="container">
+    <h1>Trouvez un bowling près de chez vous</h1>
+    <p>Carte interactive des bowlings en France. Entrez votre ville ou laissez-vous localiser automatiquement.</p>
+  </div>
+</section>
+
+<div class="annuaire-search">
+  <div class="container">
+    <div class="search-row">
+      <input id="addr-input" type="text" class="search-input" placeholder="Ville, code postal ou adresse…" autocomplete="off" aria-label="Votre adresse ou ville">
+      <select id="radius-select" class="search-radius" aria-label="Rayon de recherche">
+        <option value="20000">20 km</option>
+        <option value="50000" selected>50 km</option>
+        <option value="100000">100 km</option>
+        <option value="200000">200 km</option>
+      </select>
+      <button id="btn-search" class="btn">Rechercher</button>
+      <button id="btn-locate" class="btn btn-secondary">📍 Me localiser</button>
+    </div>
+  </div>
+</div>
+
+<div id="map-wrap">
+  <div id="map" aria-label="Carte des bowlings"></div>
+  <div id="map-status" class="map-status hidden" aria-live="polite"></div>
+</div>
+
+<section id="results-section">
+  <div class="container">
+    <p id="results-count" class="results-count"></p>
+    <div id="results-list" class="clubs-grid"></div>
+    <p class="osm-credit">Données : <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a> — contributeurs bénévoles. Certains établissements peuvent manquer ou être fermés.</p>
+  </div>
+</section>
+
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-links">
+      <a href="regles.html">Les règles</a>
+      <a href="technique.html">La technique</a>
+      <a href="materiel.html">Le matériel</a>
+      <a href="vocabulaire.html">Vocabulaire</a>
+      <a href="conseils.html">Conseils</a>
+      <a href="carnet.html">Mon carnet</a>
+      <a href="faq.html">FAQ</a>
+      <a href="histoire.html">Histoire</a>
+      <a href="ressources.html">Ressources</a>
+      <a href="annuaire.html">Annuaire</a>
+    </div>
+    <p>BowlingFacile.fr — Le guide du bowling pour les débutants. Site éducatif non affilié à une chaîne de bowling.</p>
+  </div>
+</footer>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV/XN/WPeE=" crossorigin=""></script>
+<script>
+(function () {
+  const map = L.map('map', { zoomControl: true }).setView([46.5, 2.3], 6);
+
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributeurs',
+    maxZoom: 19
+  }).addTo(map);
+
+  const userIcon = L.divIcon({
+    html: '<div class="marker-user"></div>',
+    iconSize: [18, 18],
+    iconAnchor: [9, 9],
+    className: ''
+  });
+
+  const clubIcon = L.divIcon({
+    html: '<div class="marker-club">🎳</div>',
+    iconSize: [32, 32],
+    iconAnchor: [16, 16],
+    className: ''
+  });
+
+  let userMarker = null;
+  let clubMarkers = [];
+  let lastClubs = [];
+
+  function setStatus(msg) {
+    const el = document.getElementById('map-status');
+    if (msg) { el.textContent = msg; el.classList.remove('hidden'); }
+    else { el.classList.add('hidden'); }
+  }
+
+  function haversine(lat1, lon1, lat2, lon2) {
+    const R = 6371;
+    const dLat = (lat2 - lat1) * Math.PI / 180;
+    const dLon = (lon2 - lon1) * Math.PI / 180;
+    const a = Math.sin(dLat / 2) ** 2
+      + Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) * Math.sin(dLon / 2) ** 2;
+    return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+  }
+
+  function formatDist(km) {
+    return km < 1
+      ? Math.round(km * 1000) + ' m'
+      : km.toFixed(1) + ' km';
+  }
+
+  function esc(str) {
+    return String(str)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;');
+  }
+
+  async function geocodeAddress(address) {
+    const url = 'https://nominatim.openstreetmap.org/search?q='
+      + encodeURIComponent(address)
+      + '&countrycodes=fr&format=json&limit=1&accept-language=fr';
+    const resp = await fetch(url);
+    const data = await resp.json();
+    if (!data.length) return null;
+    return { lat: parseFloat(data[0].lat), lon: parseFloat(data[0].lon) };
+  }
+
+  async function fetchBowling(lat, lon, radius) {
+    const q = '[out:json][timeout:30];'
+      + '('
+      + `node["leisure"="bowling_alley"](around:${radius},${lat},${lon});`
+      + `way["leisure"="bowling_alley"](around:${radius},${lat},${lon});`
+      + ');out body center qt;';
+    const resp = await fetch('https://overpass-api.de/api/interpreter', {
+      method: 'POST',
+      body: 'data=' + encodeURIComponent(q)
+    });
+    const data = await resp.json();
+    return data.elements || [];
+  }
+
+  function buildPopup(club) {
+    const t = club.tags || {};
+    const name = t.name || 'Bowling';
+    const city = t['addr:city'] || '';
+    return `<strong>${esc(name)}</strong>${city ? '<br>' + esc(city) : ''}<br><em>${formatDist(club._dist)}</em>`;
+  }
+
+  function buildCard(club, idx) {
+    const t = club.tags || {};
+    const name = t.name || 'Bowling';
+    const hn = t['addr:housenumber'] || '';
+    const street = t['addr:street'] || '';
+    const postcode = t['addr:postcode'] || '';
+    const city = t['addr:city'] || '';
+    const phone = t.phone || t['contact:phone'] || '';
+    const website = t.website || t['contact:website'] || '';
+    const hours = t.opening_hours || '';
+
+    const streetLine = hn && street ? hn + ' ' + street : street;
+    const cityLine = postcode && city ? postcode + ' ' + city : city;
+    const addrLine = [streetLine, cityLine].filter(Boolean).join(', ');
+
+    return `<div class="club-card" id="club-${idx}">
+  <div class="club-header">
+    <h3 class="club-name">${esc(name)}</h3>
+    <span class="club-dist">${formatDist(club._dist)}</span>
+  </div>
+  ${addrLine ? `<p class="club-addr">📍 ${esc(addrLine)}</p>` : ''}
+  ${hours ? `<p class="club-addr">🕐 ${esc(hours)}</p>` : ''}
+  <div class="club-actions">
+    ${phone ? `<a href="tel:${esc(phone)}" class="club-link">📞 ${esc(phone)}</a>` : ''}
+    ${website ? `<a href="${esc(website)}" class="club-link" target="_blank" rel="noopener noreferrer">🌐 Site web</a>` : ''}
+    <button class="btn-sm" onclick="focusClub(${idx})">Voir sur la carte</button>
+  </div>
+</div>`;
+  }
+
+  function renderResults(clubs, lat, lon) {
+    clubMarkers.forEach(m => map.removeLayer(m));
+    clubMarkers = [];
+    lastClubs = clubs;
+
+    const list = document.getElementById('results-list');
+    const count = document.getElementById('results-count');
+
+    if (!clubs.length) {
+      count.textContent = 'Aucun bowling trouvé dans ce rayon. Essayez d\'augmenter la distance de recherche.';
+      list.innerHTML = '';
+      return;
+    }
+
+    const n = clubs.length;
+    count.textContent = n + ' bowling' + (n > 1 ? 's' : '') + ' trouvé' + (n > 1 ? 's' : '') + ' — triés par distance';
+
+    list.innerHTML = clubs.map((c, i) => buildCard(c, i)).join('');
+
+    const bounds = [[lat, lon]];
+    clubs.forEach((club, i) => {
+      const m = L.marker([club._lat, club._lon], { icon: clubIcon })
+        .bindPopup(buildPopup(club))
+        .addTo(map);
+      clubMarkers.push(m);
+      bounds.push([club._lat, club._lon]);
+    });
+
+    map.fitBounds(bounds, { padding: [40, 40], maxZoom: 13 });
+  }
+
+  async function search(lat, lon) {
+    const radius = parseInt(document.getElementById('radius-select').value, 10);
+    setStatus('Recherche des bowlings en cours…');
+    document.getElementById('results-count').textContent = '';
+    document.getElementById('results-list').innerHTML = '';
+
+    if (userMarker) map.removeLayer(userMarker);
+    userMarker = L.marker([lat, lon], { icon: userIcon })
+      .bindPopup('<strong>Votre position</strong>')
+      .addTo(map);
+    map.setView([lat, lon], 10);
+
+    try {
+      const elements = await fetchBowling(lat, lon, radius);
+      const clubs = elements
+        .map(el => {
+          const clat = el.lat ?? el.center?.lat;
+          const clon = el.lon ?? el.center?.lon;
+          if (!clat || !clon) return null;
+          return { ...el, _lat: clat, _lon: clon, _dist: haversine(lat, lon, clat, clon) };
+        })
+        .filter(Boolean)
+        .sort((a, b) => a._dist - b._dist);
+
+      setStatus(null);
+      renderResults(clubs, lat, lon);
+    } catch (e) {
+      setStatus('Erreur lors de la recherche. Réessayez dans quelques instants.');
+    }
+  }
+
+  window.focusClub = function (idx) {
+    const club = lastClubs[idx];
+    if (!club) return;
+    map.setView([club._lat, club._lon], 15);
+    clubMarkers[idx]?.openPopup();
+    document.getElementById('club-' + idx)?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  };
+
+  document.getElementById('btn-search').addEventListener('click', async () => {
+    const val = document.getElementById('addr-input').value.trim();
+    if (!val) return;
+    setStatus('Recherche de l\'adresse…');
+    try {
+      const coords = await geocodeAddress(val);
+      if (!coords) { setStatus('Adresse non trouvée. Essayez un nom de ville ou un code postal.'); return; }
+      await search(coords.lat, coords.lon);
+    } catch (e) {
+      setStatus('Erreur de géocodage. Vérifiez votre connexion internet.');
+    }
+  });
+
+  document.getElementById('addr-input').addEventListener('keydown', e => {
+    if (e.key === 'Enter') document.getElementById('btn-search').click();
+  });
+
+  document.getElementById('btn-locate').addEventListener('click', () => {
+    if (!navigator.geolocation) {
+      setStatus('La géolocalisation n\'est pas disponible dans votre navigateur.');
+      return;
+    }
+    setStatus('Localisation en cours…');
+    navigator.geolocation.getCurrentPosition(
+      pos => search(pos.coords.latitude, pos.coords.longitude),
+      () => setStatus('Position refusée. Autorisez la géolocalisation dans les paramètres du navigateur.'),
+      { timeout: 10000 }
+    );
+  });
+})();
+</script>
+<script src="assets/script.js"></script>
+</body>
+</html>
