@@ -409,15 +409,15 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   }
 
   function buildSuggestionLabel(d) {
-    const a = d.address || {};
-    const main = d.display_name.split(',')[0].trim();
-    const city = a.city || a.town || a.village || a.municipality || '';
-    const postcode = a.postcode || '';
-    const dept = a.county || '';
-    const parts = [main];
-    if (postcode && city) parts.push(postcode + ' ' + city);
-    else if (city) parts.push(city);
-    if (dept && parts.length < 3 && dept !== city) parts.push(dept);
+    // Parse display_name, strip France suffixes, dedupe parts, take ≤3
+    const skip = new Set(['france', 'france métropolitaine']);
+    const seen = new Set();
+    const parts = d.display_name
+      .split(',')
+      .map(s => s.trim())
+      .filter(s => s && !skip.has(s.toLowerCase()))
+      .filter(s => { const k = s.toLowerCase(); if (seen.has(k)) return false; seen.add(k); return true; })
+      .slice(0, 3);
     return parts.join(', ');
   }
 
@@ -425,14 +425,17 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     try {
       const url = 'https://nominatim.openstreetmap.org/search'
         + '?q=' + encodeURIComponent(query)
-        + '&countrycodes=fr&format=json&limit=6&accept-language=fr&addressdetails=1';
+        + '&countrycodes=fr&format=json&limit=8&accept-language=fr&addressdetails=1';
       const r = await fetch(url);
       if (!r.ok) return;
       const data = await r.json();
 
+      // Build labels then deduplicate identical ones
+      const seen = new Set();
       acItems = data
         .map(d => ({ lat: +d.lat, lon: +d.lon, label: buildSuggestionLabel(d) }))
-        .filter(d => d.label);
+        .filter(d => { if (!d.label || seen.has(d.label)) return false; seen.add(d.label); return true; })
+        .slice(0, 6);
 
       if (!acItems.length) { hideSuggestions(); return; }
 
