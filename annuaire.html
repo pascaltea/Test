@@ -27,52 +27,92 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <link rel="shortcut icon" href="favicon.ico">
 <link rel="stylesheet" href="assets/style.css">
 <link rel="stylesheet" href="assets/leaflet.css">
+<link rel="stylesheet" href="assets/MarkerCluster.css">
 <style>
-/* === Annuaire === */
-.annuaire-search{background:linear-gradient(135deg,#0b1d3a 0%,#13294b 100%);padding:28px 0}
+/* ── Search bar ─────────────────────────────────────────────────────────────── */
+.annuaire-search{background:linear-gradient(135deg,#0b1d3a 0%,#13294b 100%);padding:28px 0 20px}
 .search-row{display:flex;gap:10px;flex-wrap:wrap;align-items:flex-start;max-width:900px;margin:0 auto}
 .search-input-wrap{position:relative;flex:1;min-width:240px}
-.search-input{width:100%;padding:13px 20px;border:none;border-radius:50px;font-size:1rem;font-family:inherit;color:#0b1d3a;outline:none;box-sizing:border-box}
+.search-input{width:100%;padding:13px 20px;border:none;border-radius:50px;font-size:1rem;font-family:inherit;color:#0b1d3a;outline:none;box-sizing:border-box;transition:box-shadow .15s}
 .search-input:focus{box-shadow:0 0 0 3px #ff6b35}
 .search-radius{-webkit-appearance:none;appearance:none;padding:13px 36px 13px 20px;border:none;border-radius:50px;font-size:1rem;font-family:inherit;font-weight:600;background:#fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath fill='%230b1d3a' d='M5 6L0 0h10z'/%3E%3C/svg%3E") no-repeat right 14px center;color:#0b1d3a;cursor:pointer;outline:none;height:48px;min-width:110px}
-/* Autocomplete dropdown */
-.suggest-box{position:absolute;top:calc(100% + 6px);left:0;right:0;background:#fff;border-radius:14px;box-shadow:0 8px 32px rgba(11,29,58,.25);overflow:hidden;z-index:9999}
-.suggest-item{padding:11px 18px;font-size:.9rem;color:#0b1d3a;cursor:pointer;border-bottom:1px solid #f0f0f0;line-height:1.3}
+.btn-reset-france{display:block;margin:12px auto 0;background:none;border:1.5px solid rgba(255,255,255,.35);color:rgba(255,255,255,.8);border-radius:20px;padding:6px 18px;font-family:inherit;font-size:.85rem;cursor:pointer;transition:all .15s}
+.btn-reset-france:hover{border-color:#fff;color:#fff;background:rgba(255,255,255,.08)}
+
+/* ── Autocomplete ────────────────────────────────────────────────────────────── */
+.suggest-box{position:absolute;top:calc(100% + 6px);left:0;right:0;background:#fff;border-radius:14px;box-shadow:0 8px 32px rgba(11,29,58,.25);overflow:hidden;z-index:9999;display:none}
+.suggest-box.open{display:block;animation:slideDown .15s ease}
+@keyframes slideDown{from{opacity:0;transform:translateY(-4px)}to{opacity:1;transform:translateY(0)}}
+.suggest-item{padding:11px 18px;font-size:.9rem;color:#0b1d3a;cursor:pointer;border-bottom:1px solid #f0f0f0;line-height:1.3;transition:background .1s}
 .suggest-item:last-child{border-bottom:none}
 .suggest-item:hover,.suggest-item.active{background:#f0f4fa}
 .suggest-item mark{background:none;color:#ff6b35;font-weight:700}
-/* Map */
+
+/* ── Map ─────────────────────────────────────────────────────────────────────── */
 #map-wrap{position:relative;width:100%}
 #map{width:100%;height:500px;background:#e8eef4}
-.map-status{position:absolute;top:14px;left:50%;transform:translateX(-50%);background:rgba(11,29,58,.88);color:#f7f7f5;padding:9px 22px;border-radius:24px;font-size:.9rem;z-index:1000;pointer-events:none;white-space:nowrap}
+.map-status{position:absolute;top:14px;left:50%;transform:translateX(-50%);background:rgba(11,29,58,.88);color:#f7f7f5;padding:9px 20px;border-radius:24px;font-size:.9rem;z-index:1000;pointer-events:none;white-space:nowrap;display:flex;align-items:center;gap:8px;transition:opacity .2s}
 .map-status.hidden{display:none}
-/* Custom marker */
+.map-status-spinner{width:13px;height:13px;border:2px solid rgba(255,255,255,.3);border-top-color:#fff;border-radius:50%;animation:spin .75s linear infinite;flex-shrink:0}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* ── Markers ─────────────────────────────────────────────────────────────────── */
 .bw-marker{background:transparent;border:none;cursor:pointer}
 .bw-marker svg{display:block;filter:drop-shadow(0 2px 5px rgba(0,0,0,.35));transition:transform .15s}
 .bw-marker:hover svg{transform:scale(1.15)}
-/* Leaflet popup override */
+
+/* Cluster */
+.bw-cluster{background:transparent;border:none}
+.cluster-icon{width:100%;height:100%;background:#E8622A;color:#fff;font-weight:700;font-size:.85rem;border-radius:50%;display:flex;align-items:center;justify-content:center;border:3px solid rgba(255,255,255,.85);box-shadow:0 3px 10px rgba(232,98,42,.45);transition:transform .15s}
+.bw-cluster:hover .cluster-icon{transform:scale(1.1)}
+
+/* User position */
+.marker-user{width:14px;height:14px;border-radius:50%;background:#2563eb;border:3px solid #fff;box-shadow:0 0 0 0 rgba(37,99,235,.5);animation:pulse-ring 2s ease-out infinite}
+@keyframes pulse-ring{0%{box-shadow:0 0 0 0 rgba(37,99,235,.5)}70%{box-shadow:0 0 0 10px rgba(37,99,235,0)}100%{box-shadow:0 0 0 0 rgba(37,99,235,0)}}
+
+/* ── Popup ───────────────────────────────────────────────────────────────────── */
 .leaflet-popup-content{min-width:180px;font-family:"Segoe UI","Helvetica Neue",Arial,sans-serif;font-size:.9rem;line-height:1.5}
 .leaflet-popup-content strong{font-size:1rem;color:#0b1d3a;display:block;margin-bottom:4px}
 .leaflet-popup-content a{color:#ff6b35}
-/* Results */
-#results-section{padding:40px 0 20px}
+
+/* ── Results ─────────────────────────────────────────────────────────────────── */
+#results-section{padding:36px 0 20px}
 .results-count{text-align:center;color:#5a6472;font-size:.95rem;margin:0 0 24px}
 .clubs-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:16px}
-.club-card{background:#fff;border-radius:14px;box-shadow:0 2px 12px rgba(11,29,58,.08);border:1px solid #e6e9ef;padding:20px 22px;display:flex;flex-direction:column;gap:10px;transition:box-shadow .2s,transform .2s}
+
+/* Cards */
+.club-card{background:#fff;border-radius:14px;box-shadow:0 2px 12px rgba(11,29,58,.08);border:1px solid #e6e9ef;padding:20px 22px;display:flex;flex-direction:column;gap:10px;transition:box-shadow .2s,transform .2s;opacity:0;animation:cardIn .35s ease forwards}
 .club-card:hover{box-shadow:0 8px 28px rgba(11,29,58,.14);transform:translateY(-2px)}
+@keyframes cardIn{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
 .club-header{display:flex;align-items:flex-start;justify-content:space-between;gap:10px}
 .club-name{font-size:1.05rem;font-weight:700;margin:0;color:#0b1d3a;line-height:1.3}
-.club-dist{background:#ff6b35;color:#fff;font-size:.78rem;font-weight:700;padding:3px 10px;border-radius:20px;white-space:nowrap;flex-shrink:0;margin-top:2px}
+.club-dist{background:#E8622A;color:#fff;font-size:.78rem;font-weight:700;padding:3px 10px;border-radius:20px;white-space:nowrap;flex-shrink:0;margin-top:2px}
 .club-addr{font-size:.88rem;color:#5a6472;margin:0}
 .club-actions{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-top:4px}
 .club-link{font-size:.85rem;color:#ff6b35;text-decoration:none}
 .club-link:hover{text-decoration:underline}
 .btn-sm{background:#0b1d3a;color:#f7f7f5;border:none;border-radius:20px;padding:6px 14px;font-size:.82rem;font-family:inherit;cursor:pointer;transition:background .15s;margin-left:auto}
 .btn-sm:hover{background:#13294b}
+
+/* Empty / error state */
+.state-placeholder{grid-column:1/-1;text-align:center;padding:48px 20px}
+.state-placeholder-icon{font-size:2.5rem;margin-bottom:10px}
+.state-placeholder-msg{color:#5a6472;font-size:.95rem;line-height:1.7;margin:0 0 16px}
+.btn-retry{background:#E8622A;color:#fff;border:none;border-radius:20px;padding:9px 22px;font-family:inherit;font-size:.9rem;cursor:pointer;transition:background .15s}
+.btn-retry:hover{background:#c94f1a}
+
+/* Credits */
 .osm-credit{font-size:.8rem;color:#aaa;text-align:center;margin-top:32px}
-/* User position marker */
-.marker-user{width:16px;height:16px;border-radius:50%;background:#2563eb;border:3px solid #fff;box-shadow:0 2px 8px rgba(37,99,235,.5)}
-@media(max-width:640px){#map{height:320px}.search-input-wrap{min-width:100%}.btn-sm{margin-left:0}}
+
+/* ── Responsive ──────────────────────────────────────────────────────────────── */
+@media(max-width:640px){
+  #map{height:320px}
+  .search-input-wrap{min-width:100%}
+  .search-radius{flex:1}
+  #btn-search,#btn-locate{flex:1}
+  .btn-sm{margin-left:0;width:100%;text-align:center}
+  .club-actions{flex-direction:column;align-items:flex-start}
+}
 </style>
 </head>
 <body>
@@ -117,8 +157,8 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         <input id="addr-input" type="text" class="search-input"
           placeholder="Ville, code postal ou adresse…"
           autocomplete="off" aria-label="Votre adresse ou ville"
-          aria-autocomplete="list" aria-controls="addr-suggestions">
-        <div id="addr-suggestions" class="suggest-box" hidden role="listbox"></div>
+          aria-autocomplete="list" aria-controls="addr-suggestions" aria-expanded="false">
+        <div id="addr-suggestions" class="suggest-box" role="listbox"></div>
       </div>
       <select id="radius-select" class="search-radius" aria-label="Rayon de recherche">
         <option value="20000">20 km</option>
@@ -129,17 +169,18 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       <button id="btn-search" class="btn">Rechercher</button>
       <button id="btn-locate" class="btn btn-secondary">📍 Me localiser</button>
     </div>
+    <button id="btn-reset" class="btn-reset-france" hidden>← Voir toute la France</button>
   </div>
 </div>
 
 <div id="map-wrap">
   <div id="map" aria-label="Carte des bowlings"></div>
-  <div id="map-status" class="map-status" aria-live="polite">Chargement des bowlings…</div>
+  <div id="map-status" class="map-status" aria-live="polite"></div>
 </div>
 
 <section id="results-section">
   <div class="container">
-    <p id="results-count" class="results-count"></p>
+    <p id="results-count" class="results-count" aria-live="polite"></p>
     <div id="results-list" class="clubs-grid"></div>
     <p class="osm-credit">Données : <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a> via Overpass API — contributeurs bénévoles. Certains établissements peuvent manquer ou être fermés.</p>
   </div>
@@ -164,6 +205,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 </footer>
 
 <script src="assets/leaflet.min.js"></script>
+<script src="assets/leaflet.markercluster.min.js"></script>
 <script>
 (function () {
 
@@ -174,59 +216,99 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     subdomains: 'abcd', maxZoom: 19
   }).addTo(map);
 
-  // Bowling ball SVG marker (orange ball with finger holes = site logo style)
+  // ── MarkerCluster ──────────────────────────────────────────────────────────
+  const markerCluster = L.markerClusterGroup({
+    showCoverageOnHover: false,
+    maxClusterRadius: 60,
+    spiderfyOnMaxZoom: true,
+    iconCreateFunction: function (cluster) {
+      const count = cluster.getChildCount();
+      const size = count < 10 ? 36 : count < 100 ? 42 : 50;
+      return L.divIcon({
+        html: '<div class="cluster-icon">' + count + '</div>',
+        iconSize: [size, size],
+        className: 'bw-cluster'
+      });
+    }
+  });
+  map.addLayer(markerCluster);
+
+  // ── Icons ──────────────────────────────────────────────────────────────────
   function makeBallIcon(size) {
     size = size || 34;
-    const half = size / 2;
-    const r = half - 1;
-    const svg = `<svg width="${size}" height="${size}" viewBox="0 0 ${size} ${size}" xmlns="http://www.w3.org/2000/svg">
-      <circle cx="${half}" cy="${half}" r="${r}" fill="#E8622A" stroke="#fff" stroke-width="2"/>
-      <circle cx="${half*0.72}" cy="${half*0.62}" r="${r*0.18}" fill="rgba(0,0,0,0.28)"/>
-      <circle cx="${half}" cy="${half*0.46}" r="${r*0.18}" fill="rgba(0,0,0,0.28)"/>
-      <circle cx="${half*1.28}" cy="${half*0.72}" r="${r*0.18}" fill="rgba(0,0,0,0.28)"/>
-    </svg>`;
-    return L.divIcon({
-      html: svg, iconSize: [size, size], iconAnchor: [half, half],
-      popupAnchor: [0, -half - 4], className: 'bw-marker'
-    });
+    const half = size / 2, r = half - 1;
+    const svg = '<svg width="' + size + '" height="' + size + '" viewBox="0 0 ' + size + ' ' + size + '" xmlns="http://www.w3.org/2000/svg">'
+      + '<circle cx="' + half + '" cy="' + half + '" r="' + r + '" fill="#E8622A" stroke="#fff" stroke-width="2"/>'
+      + '<circle cx="' + (half * 0.72) + '" cy="' + (half * 0.62) + '" r="' + (r * 0.18) + '" fill="rgba(0,0,0,0.28)"/>'
+      + '<circle cx="' + half + '" cy="' + (half * 0.46) + '" r="' + (r * 0.18) + '" fill="rgba(0,0,0,0.28)"/>'
+      + '<circle cx="' + (half * 1.28) + '" cy="' + (half * 0.72) + '" r="' + (r * 0.18) + '" fill="rgba(0,0,0,0.28)"/>'
+      + '</svg>';
+    return L.divIcon({ html: svg, iconSize: [size, size], iconAnchor: [half, half], popupAnchor: [0, -half - 4], className: 'bw-marker' });
   }
-
   const clubIcon = makeBallIcon(34);
+
   const userIcon = L.divIcon({
     html: '<div class="marker-user"></div>',
-    iconSize: [18, 18], iconAnchor: [9, 9], popupAnchor: [0, -12], className: ''
+    iconSize: [20, 20], iconAnchor: [10, 10], popupAnchor: [0, -14], className: ''
   });
 
+  // ── State ──────────────────────────────────────────────────────────────────
   let allClubs = [];
   let lastClubs = [];
   let clubMarkers = [];
   let userMarker = null;
 
-  // ── Utils ──────────────────────────────────────────────────────────────────
-  function setStatus(msg) {
-    const el = document.getElementById('map-status');
-    if (msg) { el.textContent = msg; el.classList.remove('hidden'); }
-    else { el.classList.add('hidden'); }
+  // ── Helpers ────────────────────────────────────────────────────────────────
+  function esc(s) {
+    return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
   }
 
   function haversine(lat1, lon1, lat2, lon2) {
     const R = 6371, rad = Math.PI / 180;
     const dLat = (lat2 - lat1) * rad, dLon = (lon2 - lon1) * rad;
-    const a = Math.sin(dLat/2)**2 + Math.cos(lat1*rad)*Math.cos(lat2*rad)*Math.sin(dLon/2)**2;
-    return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+    const a = Math.sin(dLat / 2) ** 2 + Math.cos(lat1 * rad) * Math.cos(lat2 * rad) * Math.sin(dLon / 2) ** 2;
+    return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
   }
 
   function fmt(km) { return km < 1 ? Math.round(km * 1000) + ' m' : km.toFixed(1) + ' km'; }
 
-  function esc(s) {
-    return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  function normalize(el) {
+    const lat = el.lat != null ? el.lat : (el.center ? el.center.lat : null);
+    const lon = el.lon != null ? el.lon : (el.center ? el.center.lon : null);
+    return (lat && lon) ? Object.assign({}, el, { _lat: +lat, _lon: +lon }) : null;
   }
 
-  function normalize(el) {
-    const lat = el.lat ?? el.center?.lat;
-    const lon = el.lon ?? el.center?.lon;
-    return (lat && lon) ? { ...el, _lat: +lat, _lon: +lon } : null;
+  function setStatus(msg, loading) {
+    const el = document.getElementById('map-status');
+    if (msg) {
+      el.innerHTML = loading
+        ? '<span class="map-status-spinner"></span>' + esc(msg)
+        : esc(msg);
+      el.className = 'map-status';
+    } else {
+      el.className = 'map-status hidden';
+    }
   }
+
+  // ── Reset button ───────────────────────────────────────────────────────────
+  const btnReset = document.getElementById('btn-reset');
+
+  function showReset() { btnReset.hidden = false; }
+  function hideReset() { btnReset.hidden = true; }
+
+  btnReset.addEventListener('click', function () {
+    addrInput.value = '';
+    hideSuggestions();
+    if (userMarker) { map.removeLayer(userMarker); userMarker = null; }
+    lastClubs = allClubs;
+    placeMarkers(allClubs);
+    document.getElementById('results-list').innerHTML = '';
+    const n = allClubs.length;
+    document.getElementById('results-count').textContent =
+      n + ' bowling' + (n > 1 ? 's' : '') + ' répertorié' + (n > 1 ? 's' : '') + ' en France — entrez votre adresse ou localisez-vous pour voir les plus proches';
+    map.setView([46.5, 2.3], 6);
+    hideReset();
+  });
 
   // ── Overpass ───────────────────────────────────────────────────────────────
   async function overpass(q) {
@@ -242,10 +324,10 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   }
 
   async function fetchNearby(lat, lon, radius) {
-    return overpass(`[out:json][timeout:30];(node["leisure"="bowling_alley"](around:${radius},${lat},${lon});way["leisure"="bowling_alley"](around:${radius},${lat},${lon}););out body center qt;`);
+    return overpass('[out:json][timeout:30];(node["leisure"="bowling_alley"](around:' + radius + ',' + lat + ',' + lon + ');way["leisure"="bowling_alley"](around:' + radius + ',' + lat + ',' + lon + '););out body center qt;');
   }
 
-  // ── Popup content ──────────────────────────────────────────────────────────
+  // ── Popup ──────────────────────────────────────────────────────────────────
   function buildPopup(c) {
     const t = c.tags || {};
     const name = t.name || 'Bowling';
@@ -256,18 +338,17 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     const phone = t.phone || t['contact:phone'] || '';
     const website = t.website || t['contact:website'] || '';
     const hours = t.opening_hours || '';
-    const addr = [hn && street ? hn + ' ' + street : street, pc && city ? pc + ' ' + city : city].filter(Boolean).join(', ');
-    const dist = c._dist != null ? `<div style="margin-top:6px;color:#ff6b35;font-weight:600">${fmt(c._dist)}</div>` : '';
-
-    return `<strong>${esc(name)}</strong>
-      ${addr ? `<div>📍 ${esc(addr)}</div>` : city ? `<div>📍 ${esc(city)}</div>` : ''}
-      ${hours ? `<div>🕐 ${esc(hours)}</div>` : ''}
-      ${phone ? `<div>📞 <a href="tel:${esc(phone)}">${esc(phone)}</a></div>` : ''}
-      ${website ? `<div>🌐 <a href="${esc(website)}" target="_blank" rel="noopener">Site web</a></div>` : ''}
-      ${dist}`;
+    const addrLine = [hn && street ? hn + ' ' + street : street, pc && city ? pc + ' ' + city : city].filter(Boolean).join(', ');
+    const dist = c._dist != null ? '<div style="margin-top:6px;color:#E8622A;font-weight:600">' + fmt(c._dist) + '</div>' : '';
+    return '<strong>' + esc(name) + '</strong>'
+      + (addrLine ? '<div>📍 ' + esc(addrLine) + '</div>' : city ? '<div>📍 ' + esc(city) + '</div>' : '')
+      + (hours ? '<div>🕐 ' + esc(hours) + '</div>' : '')
+      + (phone ? '<div>📞 <a href="tel:' + esc(phone) + '">' + esc(phone) + '</a></div>' : '')
+      + (website ? '<div>🌐 <a href="' + esc(website) + '" target="_blank" rel="noopener">Site web</a></div>' : '')
+      + dist;
   }
 
-  // ── Card HTML ──────────────────────────────────────────────────────────────
+  // ── Card ───────────────────────────────────────────────────────────────────
   function buildCard(c, i) {
     const t = c.tags || {};
     const name = t.name || 'Bowling';
@@ -278,63 +359,84 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     const phone = t.phone || t['contact:phone'] || '';
     const website = t.website || t['contact:website'] || '';
     const hours = t.opening_hours || '';
-    const addr = [hn && street ? hn + ' ' + street : street, pc && city ? pc + ' ' + city : city].filter(Boolean).join(', ');
-
-    return `<div class="club-card" id="club-${i}">
-  <div class="club-header">
-    <h3 class="club-name">${esc(name)}</h3>
-    ${c._dist != null ? `<span class="club-dist">${fmt(c._dist)}</span>` : ''}
-  </div>
-  ${addr ? `<p class="club-addr">📍 ${esc(addr)}</p>` : city ? `<p class="club-addr">📍 ${esc(city)}</p>` : ''}
-  ${hours ? `<p class="club-addr">🕐 ${esc(hours)}</p>` : ''}
-  <div class="club-actions">
-    ${phone ? `<a href="tel:${esc(phone)}" class="club-link">📞 ${esc(phone)}</a>` : ''}
-    ${website ? `<a href="${esc(website)}" class="club-link" target="_blank" rel="noopener">🌐 Site web</a>` : ''}
-    <button class="btn-sm" onclick="focusClub(${i})">Voir sur la carte</button>
-  </div>
-</div>`;
+    const addrLine = [hn && street ? hn + ' ' + street : street, pc && city ? pc + ' ' + city : city].filter(Boolean).join(', ');
+    const delay = Math.min(i * 40, 400);
+    return '<div class="club-card" id="club-' + i + '" style="animation-delay:' + delay + 'ms">'
+      + '<div class="club-header">'
+      + '<h3 class="club-name">' + esc(name) + '</h3>'
+      + (c._dist != null ? '<span class="club-dist">' + fmt(c._dist) + '</span>' : '')
+      + '</div>'
+      + (addrLine ? '<p class="club-addr">📍 ' + esc(addrLine) + '</p>' : city ? '<p class="club-addr">📍 ' + esc(city) + '</p>' : '')
+      + (hours ? '<p class="club-addr">🕐 ' + esc(hours) + '</p>' : '')
+      + '<div class="club-actions">'
+      + (phone ? '<a href="tel:' + esc(phone) + '" class="club-link">📞 ' + esc(phone) + '</a>' : '')
+      + (website ? '<a href="' + esc(website) + '" class="club-link" target="_blank" rel="noopener">🌐 Site web</a>' : '')
+      + '<button class="btn-sm" onclick="focusClub(' + i + ')">Voir sur la carte</button>'
+      + '</div>'
+      + '</div>';
   }
 
   // ── Place markers ──────────────────────────────────────────────────────────
   function placeMarkers(clubs) {
-    clubMarkers.forEach(m => map.removeLayer(m));
-    clubMarkers = clubs.map(c => {
-      return L.marker([c._lat, c._lon], { icon: clubIcon })
-        .bindPopup(buildPopup(c), { maxWidth: 260 })
-        .addTo(map);
+    markerCluster.clearLayers();
+    clubMarkers = clubs.map(function (c) {
+      return L.marker([c._lat, c._lon], { icon: clubIcon }).bindPopup(buildPopup(c), { maxWidth: 260 });
     });
+    markerCluster.addLayers(clubMarkers);
   }
 
-  // ── Render results list ────────────────────────────────────────────────────
+  // ── Empty / error states ───────────────────────────────────────────────────
+  function showEmptyState() {
+    document.getElementById('results-count').textContent = '';
+    document.getElementById('results-list').innerHTML =
+      '<div class="state-placeholder">'
+      + '<div class="state-placeholder-icon">🎳</div>'
+      + '<p class="state-placeholder-msg">Aucun bowling trouvé dans ce rayon.<br>Essayez d\'augmenter la distance de recherche.</p>'
+      + '</div>';
+  }
+
+  function showErrorState(msg, retryFn) {
+    setStatus(null);
+    document.getElementById('results-count').textContent = '';
+    document.getElementById('results-list').innerHTML =
+      '<div class="state-placeholder">'
+      + '<div class="state-placeholder-icon">⚠️</div>'
+      + '<p class="state-placeholder-msg">' + esc(msg) + '</p>'
+      + (retryFn ? '<button class="btn-retry" id="btn-retry">Réessayer</button>' : '')
+      + '</div>';
+    if (retryFn) document.getElementById('btn-retry').onclick = retryFn;
+  }
+
+  // ── Render results ─────────────────────────────────────────────────────────
   function renderResults(clubs, userLat, userLon) {
     lastClubs = clubs;
     const list = document.getElementById('results-list');
     const count = document.getElementById('results-count');
 
     if (!clubs.length) {
-      count.textContent = 'Aucun bowling trouvé dans ce rayon. Essayez d\'augmenter la distance.';
-      list.innerHTML = '';
+      count.textContent = '';
+      showEmptyState();
       return;
     }
 
     const n = clubs.length;
     count.textContent = n + ' bowling' + (n > 1 ? 's' : '') + ' trouvé' + (n > 1 ? 's' : '') + ' — triés par distance';
-    list.innerHTML = clubs.map((c, i) => buildCard(c, i)).join('');
+    list.innerHTML = clubs.map(function (c, i) { return buildCard(c, i); }).join('');
     placeMarkers(clubs);
 
-    const bounds = [[userLat, userLon], ...clubs.map(c => [c._lat, c._lon])];
+    const bounds = [[userLat, userLon]].concat(clubs.map(function (c) { return [c._lat, c._lon]; }));
     map.fitBounds(bounds, { padding: [40, 40], maxZoom: 13 });
   }
 
-  // ── Focus a club on map (from card button) ─────────────────────────────────
+  // ── Focus club on map ──────────────────────────────────────────────────────
   window.focusClub = function (i) {
     const c = lastClubs[i];
-    if (!c) return;
-    // Scroll map into view first, then zoom in after scroll completes
+    if (!c || !clubMarkers[i]) return;
     document.getElementById('map').scrollIntoView({ behavior: 'smooth', block: 'start' });
     setTimeout(function () {
-      map.setView([c._lat, c._lon], 15);
-      if (clubMarkers[i]) clubMarkers[i].openPopup();
+      markerCluster.zoomToShowLayer(clubMarkers[i], function () {
+        clubMarkers[i].openPopup();
+      });
     }, 450);
   };
 
@@ -347,42 +449,44 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       .bindPopup('<strong>Votre position</strong>').addTo(map);
 
     document.getElementById('results-list').innerHTML = '';
+    showReset();
 
     if (allClubs.length > 0) {
       const clubs = allClubs
-        .map(c => ({ ...c, _dist: haversine(lat, lon, c._lat, c._lon) }))
-        .filter(c => c._dist * 1000 <= radius)
-        .sort((a, b) => a._dist - b._dist);
+        .map(function (c) { return Object.assign({}, c, { _dist: haversine(lat, lon, c._lat, c._lon) }); })
+        .filter(function (c) { return c._dist * 1000 <= radius; })
+        .sort(function (a, b) { return a._dist - b._dist; });
       setStatus(null);
       renderResults(clubs, lat, lon);
     } else {
-      setStatus('Recherche en cours…');
+      setStatus('Recherche en cours…', true);
       try {
         const els = await fetchNearby(lat, lon, radius);
         const clubs = els.map(normalize).filter(Boolean)
-          .map(c => ({ ...c, _dist: haversine(lat, lon, c._lat, c._lon) }))
-          .sort((a, b) => a._dist - b._dist);
+          .map(function (c) { return Object.assign({}, c, { _dist: haversine(lat, lon, c._lat, c._lon) }); })
+          .sort(function (a, b) { return a._dist - b._dist; });
         setStatus(null);
         renderResults(clubs, lat, lon);
-      } catch {
-        setStatus('Erreur de recherche. Réessayez dans quelques instants.');
+      } catch (e) {
+        showErrorState('Erreur de recherche. Réessayez dans quelques instants.', function () { search(lat, lon); });
       }
     }
   }
 
-  // ── Page init: load all France ─────────────────────────────────────────────
+  // ── Init: load all France ──────────────────────────────────────────────────
   async function init() {
-    setStatus('Chargement des bowlings de France…');
+    setStatus('Chargement des bowlings de France…', true);
     try {
       const els = await fetchAllFrance();
       allClubs = els.map(normalize).filter(Boolean);
+      lastClubs = allClubs;
       placeMarkers(allClubs);
       setStatus(null);
       const n = allClubs.length;
       document.getElementById('results-count').textContent =
         n + ' bowling' + (n > 1 ? 's' : '') + ' répertorié' + (n > 1 ? 's' : '') + ' en France — entrez votre adresse ou localisez-vous pour voir les plus proches';
-    } catch {
-      setStatus('Impossible de charger les données. Vérifiez votre connexion internet.');
+    } catch (e) {
+      showErrorState('Impossible de charger les données. Vérifiez votre connexion internet.', init);
     }
   }
 
@@ -393,8 +497,13 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   let acIndex = -1;
   let acItems = [];
 
+  function showSuggestions() {
+    suggestBox.classList.add('open');
+    addrInput.setAttribute('aria-expanded', 'true');
+  }
   function hideSuggestions() {
-    suggestBox.hidden = true;
+    suggestBox.classList.remove('open');
+    addrInput.setAttribute('aria-expanded', 'false');
     acIndex = -1;
     acItems = [];
   }
@@ -409,16 +518,15 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   }
 
   function buildSuggestionLabel(d) {
-    // Parse display_name, strip France suffixes, dedupe parts, take ≤3
     const skip = new Set(['france', 'france métropolitaine']);
     const seen = new Set();
-    const parts = d.display_name
+    return d.display_name
       .split(',')
-      .map(s => s.trim())
-      .filter(s => s && !skip.has(s.toLowerCase()))
-      .filter(s => { const k = s.toLowerCase(); if (seen.has(k)) return false; seen.add(k); return true; })
-      .slice(0, 3);
-    return parts.join(', ');
+      .map(function (s) { return s.trim(); })
+      .filter(function (s) { return s && !skip.has(s.toLowerCase()); })
+      .filter(function (s) { const k = s.toLowerCase(); if (seen.has(k)) return false; seen.add(k); return true; })
+      .slice(0, 3)
+      .join(', ');
   }
 
   async function loadSuggestions(query) {
@@ -430,55 +538,56 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       if (!r.ok) return;
       const data = await r.json();
 
-      // Build labels then deduplicate identical ones
       const seen = new Set();
       acItems = data
-        .map(d => ({ lat: +d.lat, lon: +d.lon, label: buildSuggestionLabel(d) }))
-        .filter(d => { if (!d.label || seen.has(d.label)) return false; seen.add(d.label); return true; })
+        .map(function (d) { return { lat: +d.lat, lon: +d.lon, label: buildSuggestionLabel(d) }; })
+        .filter(function (d) { if (!d.label || seen.has(d.label)) return false; seen.add(d.label); return true; })
         .slice(0, 6);
 
       if (!acItems.length) { hideSuggestions(); return; }
 
       acIndex = -1;
-      suggestBox.innerHTML = acItems.map((item, i) =>
-        `<div class="suggest-item" role="option" data-i="${i}">${highlightMatch(item.label, query)}</div>`
-      ).join('');
-      suggestBox.hidden = false;
+      suggestBox.innerHTML = acItems.map(function (item, i) {
+        return '<div class="suggest-item" role="option" data-i="' + i + '">' + highlightMatch(item.label, query) + '</div>';
+      }).join('');
+      showSuggestions();
 
-      suggestBox.querySelectorAll('.suggest-item').forEach(el => {
-        el.addEventListener('mousedown', e => {
+      suggestBox.querySelectorAll('.suggest-item').forEach(function (el) {
+        el.addEventListener('mousedown', function (e) {
           e.preventDefault();
-          addrInput.value = acItems[+el.dataset.i].label;
+          const item = acItems[+el.dataset.i];
+          addrInput.value = item.label;
           hideSuggestions();
-          search(acItems[+el.dataset.i].lat, acItems[+el.dataset.i].lon);
+          search(item.lat, item.lon);
         });
       });
-    } catch { hideSuggestions(); }
+    } catch (e) { hideSuggestions(); }
   }
 
-  addrInput.addEventListener('input', () => {
+  addrInput.addEventListener('input', function () {
     clearTimeout(acTimer);
     const q = addrInput.value.trim();
     if (q.length < 2) { hideSuggestions(); return; }
-    acTimer = setTimeout(() => loadSuggestions(q), 280);
+    acTimer = setTimeout(function () { loadSuggestions(q); }, 280);
   });
 
-  addrInput.addEventListener('keydown', e => {
+  addrInput.addEventListener('keydown', function (e) {
     const items = suggestBox.querySelectorAll('.suggest-item');
-    if (e.key === 'ArrowDown' && !suggestBox.hidden) {
+    const isOpen = suggestBox.classList.contains('open');
+    if (e.key === 'ArrowDown' && isOpen) {
       e.preventDefault();
-      items[acIndex]?.classList.remove('active');
+      items[acIndex] && items[acIndex].classList.remove('active');
       acIndex = Math.min(acItems.length - 1, acIndex + 1);
-      items[acIndex]?.classList.add('active');
+      items[acIndex] && items[acIndex].classList.add('active');
       if (acItems[acIndex]) addrInput.value = acItems[acIndex].label;
-    } else if (e.key === 'ArrowUp' && !suggestBox.hidden) {
+    } else if (e.key === 'ArrowUp' && isOpen) {
       e.preventDefault();
-      items[acIndex]?.classList.remove('active');
+      items[acIndex] && items[acIndex].classList.remove('active');
       acIndex = Math.max(0, acIndex - 1);
-      items[acIndex]?.classList.add('active');
+      items[acIndex] && items[acIndex].classList.add('active');
       if (acItems[acIndex]) addrInput.value = acItems[acIndex].label;
     } else if (e.key === 'Enter') {
-      if (!suggestBox.hidden && acIndex >= 0 && acItems[acIndex]) {
+      if (isOpen && acIndex >= 0 && acItems[acIndex]) {
         e.preventDefault();
         addrInput.value = acItems[acIndex].label;
         hideSuggestions();
@@ -491,16 +600,16 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     }
   });
 
-  document.addEventListener('click', e => {
+  document.addEventListener('click', function (e) {
     if (!addrInput.contains(e.target) && !suggestBox.contains(e.target)) hideSuggestions();
   });
 
   // ── Button events ──────────────────────────────────────────────────────────
-  document.getElementById('btn-search').addEventListener('click', async () => {
+  document.getElementById('btn-search').addEventListener('click', async function () {
     const val = addrInput.value.trim();
     if (!val) return;
     hideSuggestions();
-    setStatus('Géocodage en cours…');
+    setStatus('Géocodage en cours…', true);
     try {
       const r = await fetch('https://nominatim.openstreetmap.org/search?q='
         + encodeURIComponent(val)
@@ -508,17 +617,25 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       const d = await r.json();
       if (!d.length) { setStatus('Adresse non trouvée. Essayez un nom de ville ou un code postal.'); return; }
       await search(+d[0].lat, +d[0].lon);
-    } catch {
+    } catch (e) {
       setStatus('Erreur réseau. Vérifiez votre connexion internet.');
     }
   });
 
-  document.getElementById('btn-locate').addEventListener('click', () => {
+  const btnLocate = document.getElementById('btn-locate');
+  btnLocate.addEventListener('click', function () {
     if (!navigator.geolocation) { setStatus('Géolocalisation non disponible dans ce navigateur.'); return; }
-    setStatus('Localisation en cours…');
+    btnLocate.disabled = true;
+    setStatus('Localisation en cours…', true);
     navigator.geolocation.getCurrentPosition(
-      p => search(p.coords.latitude, p.coords.longitude),
-      () => setStatus('Position refusée. Autorisez la géolocalisation dans les paramètres du navigateur.'),
+      function (p) {
+        btnLocate.disabled = false;
+        search(p.coords.latitude, p.coords.longitude);
+      },
+      function () {
+        btnLocate.disabled = false;
+        setStatus('Position refusée. Autorisez la géolocalisation dans les paramètres du navigateur.');
+      },
       { timeout: 10000 }
     );
   });
