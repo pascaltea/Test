@@ -1,3 +1,15 @@
+// Nav glassmorphism on scroll
+const _hdr = document.querySelector('.site-header');
+if (_hdr) window.addEventListener('scroll', () =>
+  _hdr.classList.toggle('scrolled', window.scrollY > 40), { passive: true });
+
+// Scroll reveal
+const _ro = new IntersectionObserver(
+  es => es.forEach(e => { if (e.isIntersecting) { e.target.classList.add('revealed'); _ro.unobserve(e.target); } }),
+  { threshold: 0.1 }
+);
+document.querySelectorAll('.reveal').forEach(el => _ro.observe(el));
+
 document.addEventListener("DOMContentLoaded", function () {
   var toggle = document.querySelector(".menu-toggle");
   var nav = document.querySelector(".main-nav");
