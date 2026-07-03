@@ -404,10 +404,10 @@ details.faq-item p { margin: 0 0 18px; color: var(--clr-muted); }
 .actu-card .actu-meta { color: var(--clr-muted); font-size: 0.82rem; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px; display: block; }
 
 /* CARNET */
-.score-form { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; background: var(--clr-card); border: 1px solid var(--clr-border); border-radius: var(--r-md); padding: 26px; box-shadow: none; }
+.score-form { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; background: var(--clr-card); border: 1px solid var(--clr-border); border-radius: var(--r-md); padding: 26px; box-shadow: none; overflow: hidden; }
 .score-form-row { display: flex; flex-direction: column; gap: 8px; }
 .score-form-row label { font-size: 0.85rem; font-weight: 600; color: var(--clr-muted); }
-.score-form-row input { -webkit-appearance: none; appearance: none; padding: 12px 14px; border: 1px solid rgba(242,239,232,.3); border-radius: var(--r-sm); font-size: 1rem; font-family: var(--font); width: 100%; box-sizing: border-box; background: rgba(242,239,232,.06); color: var(--clr-text); }
+.score-form-row input { -webkit-appearance: none; appearance: none; padding: 12px 14px; border: 1px solid rgba(242,239,232,.3); border-radius: var(--r-sm); font-size: 1rem; font-family: var(--font); width: 100%; max-width: 100%; min-width: 0; box-sizing: border-box; background: rgba(242,239,232,.06); color: var(--clr-text); }
 .score-form-row input:focus { outline: none; border-color: var(--clr-orange); box-shadow: 0 0 0 3px var(--clr-orange-dim); }
 .score-form button[type="submit"] { grid-column: 1 / -1; justify-self: stretch; width: 100%; justify-content: center; cursor: pointer; margin-top: 4px; }
 @media (max-width: 700px) { .score-form { grid-template-columns: 1fr; } }
