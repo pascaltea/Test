@@ -407,9 +407,10 @@ details.faq-item p { margin: 0 0 18px; color: var(--clr-muted); }
 .score-form { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; background: var(--clr-card); border: 1px solid var(--clr-border); border-radius: var(--r-md); padding: 26px; box-shadow: none; }
 .score-form-row { display: flex; flex-direction: column; gap: 8px; }
 .score-form-row label { font-size: 0.85rem; font-weight: 600; color: var(--clr-muted); }
-.score-form-row input { padding: 12px 14px; border: 1px solid rgba(242,239,232,.3); border-radius: var(--r-sm); font-size: 1rem; font-family: var(--font); width: 100%; background: rgba(242,239,232,.06); color: var(--clr-text); }
+.score-form-row input { -webkit-appearance: none; appearance: none; padding: 12px 14px; border: 1px solid rgba(242,239,232,.3); border-radius: var(--r-sm); font-size: 1rem; font-family: var(--font); width: 100%; box-sizing: border-box; background: rgba(242,239,232,.06); color: var(--clr-text); }
 .score-form-row input:focus { outline: none; border-color: var(--clr-orange); box-shadow: 0 0 0 3px var(--clr-orange-dim); }
 .score-form button[type="submit"] { grid-column: 1 / -1; justify-self: stretch; width: 100%; justify-content: center; cursor: pointer; margin-top: 4px; }
+@media (max-width: 700px) { .score-form { grid-template-columns: 1fr; } }
 .form-msg { grid-column: 1 / -1; margin: 0; font-size: 0.9rem; font-weight: 600; color: var(--clr-cyan); min-height: 1.2em; }
 .form-msg-error { color: var(--rouge); }
 .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 16px; margin: 30px 0; }
