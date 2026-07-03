@@ -48,6 +48,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         <li><a href="materiel.html">Le matériel</a></li>
         <li><a href="vocabulaire.html">Vocabulaire</a></li>
         <li><a href="conseils.html" class="active">Conseils</a></li>
+        <li><a href="defi.html">Défi</a></li>
         <li><a href="carnet.html">Mon carnet</a></li>
         <li><a href="faq.html">FAQ</a></li>
         <li><a href="histoire.html">Histoire</a></li>
@@ -164,6 +165,12 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
     <p style="text-align:center;margin-top:20px;">D'autres questions pratiques ? Retrouvez nos <a href="faq.html">réponses dans la FAQ</a>.</p>
 
+    <div class="quiz-section reveal">
+      <h3>Quiz — Testez vos connaissances</h3>
+      <p class="quiz-subtitle">4 questions sur les bons réflexes au bowling. Êtes-vous prêt ?</p>
+      <div id="quiz-conseils"></div>
+    </div>
+
   </div>
 </section>
 
@@ -186,5 +193,13 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 </footer>
 
 <script src="assets/script.js"></script>
+<script>
+initQuiz([
+  { q: "Sur quoi doit-on fixer son regard pendant le lancer pour plus de précision ?", opts: ["Les quilles au fond", "Les flèches au sol (à 4,5 m)", "Ses pieds pendant l'approche", "La ligne de faute"], correct: 1, expl: "Les flèches sont bien plus proches et plus faciles à viser que les quilles à 18 m. Viser la 2ᵉ flèche (en partant de votre côté) est le repère classique du débutant." },
+  { q: "Que risque-t-on en franchissant la ligne de faute pendant le lancer ?", opts: ["Un avertissement verbal", "Une glissade + le score de la frame annulé", "Seulement une pénalité de 5 points", "Rien, c'est autorisé"], correct: 1, expl: "La ligne de faute annule automatiquement le score du lancer (même si des quilles tombent). De plus, la piste est huilée : le franchissement peut provoquer une chute dangereuse." },
+  { q: "Que signifie le principe 'bouger d'une planche' ?", opts: ["Changer de boule", "Décaler légèrement sa position de départ pour corriger la trajectoire", "Viser une flèche différente", "Changer de pied d'appui"], correct: 1, expl: "Quand votre boule manque systématiquement d'un côté, décalez votre position de départ d'une ou deux planches (les lignes gravées dans le bois) pour recadrer la trajectoire." },
+  { q: "À quelle fréquence est-il conseillé de nettoyer sa boule de bowling personnelle ?", opts: ["Jamais, le service s'en charge", "Après chaque partie", "Une fois par saison", "Uniquement si elle est visible sale"], correct: 1, expl: "L'huile de la piste s'accumule dans les pores de la boule et dégrade ses performances. Un nettoyage après chaque session (avec un chiffon microfibre) est la bonne habitude." }
+], 'quiz-conseils', 'conseils');
+</script>
 </body>
 </html>

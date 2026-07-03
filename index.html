@@ -58,6 +58,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         <li><a href="materiel.html">Le matériel</a></li>
         <li><a href="vocabulaire.html">Vocabulaire</a></li>
         <li><a href="conseils.html">Conseils</a></li>
+        <li><a href="defi.html">Défi</a></li>
         <li><a href="carnet.html">Mon carnet</a></li>
         <li><a href="faq.html">FAQ</a></li>
         <li><a href="histoire.html">Histoire</a></li>
@@ -129,6 +130,21 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   </div>
 </section>
 
+<section class="reveal">
+  <div class="container" style="max-width:860px">
+    <h2 class="section-title">Défi de la semaine</h2>
+    <p class="section-sub">Un petit exercice à tester lors de votre prochaine partie. Nouveau défi chaque semaine.</p>
+    <a href="defi.html" class="defi-widget">
+      <div class="defi-widget-icon">🎯</div>
+      <div class="defi-widget-body">
+        <h3>Défi semaine en cours</h3>
+        <p>Cliquez pour voir le défi complet avec les consignes et l'objectif à atteindre.</p>
+        <div class="defi-widget-preview" id="defi-widget-preview">Chargement…</div>
+      </div>
+    </a>
+  </div>
+</section>
+
 <section class="alt">
   <div class="container">
     <h2 class="section-title">Le bowling en 60 secondes</h2>
@@ -165,5 +181,62 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 </footer>
 
 <script src="assets/script.js"></script>
+<script>
+var DEFIS_INDEX = [
+  { title: 'Viser la 2ᵉ flèche pendant 10 lancers' },
+  { title: 'Ralentir l\'approche de 20 %' },
+  { title: 'Le follow-through parfait' },
+  { title: 'Travailler le glissé final' },
+  { title: 'Lancer sans regarder les quilles' },
+  { title: 'La prise détendue' },
+  { title: 'Point de départ fixe pendant 2 games' },
+  { title: 'Spare training : la quille 10' },
+  { title: 'Spare training : la quille 7' },
+  { title: 'Lancer avec seulement 3 pas' },
+  { title: 'Session spares avant tout' },
+  { title: 'Travailler l\'axe d\'approche' },
+  { title: 'Boule plus légère que d\'habitude' },
+  { title: 'Tourner les doigts au lâcher' },
+  { title: 'Rythme régulier : métronome mental' },
+  { title: 'Viser une flèche différente' },
+  { title: '10 lancers, même vitesse' },
+  { title: 'Ne jamais dépasser la ligne de faute' },
+  { title: 'Split 2-7 ou 3-10 : l\'exercice d\'angle' },
+  { title: 'La finale sous pression' },
+  { title: 'La routine de préparation à 3 temps' },
+  { title: 'Oublier le lancer précédent' },
+  { title: 'Jouer sans regarder le score' },
+  { title: 'La visualisation avant le lancer' },
+  { title: 'Respiration avant le lancer' },
+  { title: 'Jouer en temps limité' },
+  { title: 'Célébrez les bons lancers' },
+  { title: 'Fixer un objectif de processus' },
+  { title: 'La partie calme : aucune réaction' },
+  { title: 'Jouer le dernier lancer comme le premier' },
+  { title: 'Parler de son jeu après la partie' },
+  { title: 'Jouer pour le plaisir uniquement' },
+  { title: 'Observer un joueur régulier' },
+  { title: 'Filmer votre lancer' },
+  { title: 'Lire l\'huile sur la piste' },
+  { title: 'Compter vos open frames' },
+  { title: 'Analyser votre zone de toucher' },
+  { title: 'Comparer 2 boules différentes' },
+  { title: 'Repérer les planches numérotées' },
+  { title: 'Regarder l\'entrée de la boule dans les quilles' },
+  { title: 'Identifier votre erreur la plus fréquente' },
+  { title: 'Observer le comportement des pistes voisines' },
+  { title: 'Enseigner une règle à quelqu\'un' },
+  { title: 'Comparer avec un joueur de niveau différent' },
+  { title: 'Le défi en équipe' },
+  { title: 'Regarder une compétition en salle' },
+  { title: 'Retour dans la même salle chaque mois' },
+  { title: 'Nettoyer votre boule' },
+  { title: 'Essayer des chaussures de bowling personnelles' },
+  { title: 'Choisir votre boule avec la règle des 10 %' },
+  { title: 'Tester un protège-poignet' },
+  { title: 'Vérifier l\'ajustement des trous de boule' }
+];
+initDefi(DEFIS_INDEX);
+</script>
 </body>
 </html>

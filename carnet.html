@@ -136,6 +136,21 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       </div>
     </div>
 
+    <div class="goal-section reveal" id="goal-section">
+      <h3>Mon objectif de moyenne</h3>
+      <div class="goal-row">
+        <label for="goal-input">Je vise une moyenne de</label>
+        <input type="number" id="goal-input" class="goal-input" min="1" max="300" placeholder="ex: 120">
+        <label for="goal-input">points</label>
+      </div>
+      <div class="goal-bar-wrap">
+        <div class="goal-bar-fill" id="goal-bar-fill" style="width:0%"></div>
+      </div>
+      <p class="goal-status" id="goal-status">Fixez un objectif de moyenne pour suivre votre progression.</p>
+      <h3 style="font-family:var(--font-sub);font-size:1.1rem;color:var(--clr-cyan);letter-spacing:.04em;margin:24px 0 14px;">Badges débloqués</h3>
+      <div class="milestone-grid" id="milestone-grid"></div>
+    </div>
+
   </div>
 </section>
 

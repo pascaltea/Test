@@ -420,6 +420,7 @@ document.addEventListener("DOMContentLoaded", function () {
     function saveScores(scores) {
       try {
         localStorage.setItem(STORAGE_KEY, JSON.stringify(scores));
+        document.dispatchEvent(new Event('bf-scores-updated'));
         return true;
       } catch (e) {
         return false;
@@ -663,4 +664,183 @@ document.addEventListener("DOMContentLoaded", function () {
 
     render();
   }
+
+  // ===== Objectif & Milestones (carnet.html) =====
+  var goalSection = document.getElementById('goal-section');
+  if (goalSection) {
+    var goalInput = document.getElementById('goal-input');
+    var goalBar = document.getElementById('goal-bar-fill');
+    var goalStatus = document.getElementById('goal-status');
+    var MILESTONES = [
+      { score: 50,  icon: '🎳', name: '1er lancer' },
+      { score: 75,  icon: '⭐', name: 'Débutant' },
+      { score: 100, icon: '🔥', name: 'Triple chiffre' },
+      { score: 125, icon: '💥', name: 'Confirmé' },
+      { score: 150, icon: '🎯', name: 'Précis' },
+      { score: 175, icon: '🏆', name: 'Expert' },
+      { score: 200, icon: '💎', name: 'Elite' },
+      { score: 250, icon: '👑', name: 'Pro' }
+    ];
+
+    function renderGoal() {
+      var scores = loadScores();
+      var saved = parseInt(localStorage.getItem('bf_goal') || '0', 10);
+      if (goalInput) goalInput.value = saved || '';
+      var avg = scores.length ? Math.round(scores.reduce(function(s,e){ return s + e.score; }, 0) / scores.length) : 0;
+      var pct = saved > 0 ? Math.min(100, Math.round(avg / saved * 100)) : 0;
+      if (goalBar) goalBar.style.width = pct + '%';
+      if (goalStatus) {
+        if (!saved) {
+          goalStatus.innerHTML = 'Fixez un objectif de moyenne pour suivre votre progression.';
+        } else {
+          goalStatus.innerHTML = 'Moyenne actuelle : <strong>' + avg + ' pts</strong> — Objectif : <strong>' + saved + ' pts</strong> (' + pct + ' %)';
+        }
+      }
+      var grid = document.getElementById('milestone-grid');
+      if (grid) {
+        grid.innerHTML = '';
+        MILESTONES.forEach(function(m) {
+          var best = scores.length ? Math.max.apply(null, scores.map(function(e){ return e.score; })) : 0;
+          var unlocked = best >= m.score;
+          var div = document.createElement('div');
+          div.className = 'milestone' + (unlocked ? ' unlocked' : '');
+          div.innerHTML = '<div class="milestone-icon">' + (unlocked ? m.icon : '🔒') + '</div><div class="milestone-name">' + m.name + '<br><small style="font-weight:400;opacity:.7">' + m.score + ' pts</small></div>';
+          grid.appendChild(div);
+        });
+      }
+    }
+
+    if (goalInput) {
+      goalInput.addEventListener('change', function() {
+        var v = parseInt(goalInput.value, 10);
+        if (v > 0) { localStorage.setItem('bf_goal', v); }
+        else { localStorage.removeItem('bf_goal'); }
+        renderGoal();
+      });
+    }
+    renderGoal();
+    document.addEventListener('bf-scores-updated', renderGoal);
+  }
+
 });
+
+// ===== Quiz interactif =====
+function initQuiz(questions, containerId, pageKey) {
+  var container = document.getElementById(containerId);
+  if (!container) return;
+  var bestKey = 'bf_quiz_' + pageKey;
+  var state = { answers: {}, done: 0 };
+
+  function getBest() { return parseInt(localStorage.getItem(bestKey) || '0', 10); }
+  function saveBest(s) { if (s > getBest()) localStorage.setItem(bestKey, s); }
+
+  function render() {
+    container.innerHTML = '';
+    var score = 0;
+    var finished = state.done >= questions.length;
+    if (finished) {
+      questions.forEach(function(q, i) { if (state.answers[i] === q.correct) score++; });
+    }
+
+    questions.forEach(function(q, i) {
+      var answered = state.answers[i] !== undefined;
+      var chosen = state.answers[i];
+      var correct = q.correct;
+
+      var qDiv = document.createElement('div');
+      qDiv.className = 'quiz-q';
+
+      var pText = document.createElement('p');
+      pText.className = 'quiz-q-text';
+      pText.textContent = (i + 1) + '. ' + q.q;
+      qDiv.appendChild(pText);
+
+      var optsDiv = document.createElement('div');
+      optsDiv.className = 'quiz-options';
+
+      q.opts.forEach(function(opt, j) {
+        var btn = document.createElement('button');
+        btn.className = 'quiz-opt';
+        var icon = document.createElement('span');
+        icon.className = 'quiz-opt-icon';
+        icon.textContent = answered ? (j === correct ? '✓' : (j === chosen ? '✗' : '·')) : '○';
+        var txt = document.createElement('span');
+        txt.textContent = opt;
+        btn.appendChild(icon);
+        btn.appendChild(txt);
+        if (answered) {
+          btn.classList.add('disabled');
+          if (j === correct) btn.classList.add('correct');
+          else if (j === chosen) btn.classList.add('wrong');
+        } else {
+          btn.addEventListener('click', function() {
+            state.answers[i] = j;
+            if (Object.keys(state.answers).length >= questions.length) state.done = questions.length;
+            render();
+          });
+        }
+        optsDiv.appendChild(btn);
+      });
+      qDiv.appendChild(optsDiv);
+
+      if (answered && q.expl) {
+        var expl = document.createElement('p');
+        expl.className = 'quiz-expl';
+        expl.textContent = q.expl;
+        qDiv.appendChild(expl);
+      }
+      container.appendChild(qDiv);
+    });
+
+    var footer = document.createElement('div');
+    footer.className = 'quiz-footer';
+    if (finished) {
+      saveBest(score);
+      var lbl = document.createElement('div');
+      lbl.className = 'quiz-score-label';
+      lbl.textContent = score + '/' + questions.length;
+      var best = document.createElement('div');
+      best.className = 'quiz-best';
+      best.textContent = 'Meilleur : ' + getBest() + '/' + questions.length;
+      var retry = document.createElement('button');
+      retry.className = 'btn btn-sm quiz-retry-btn';
+      retry.textContent = '↺ Recommencer';
+      retry.addEventListener('click', function() { state = { answers: {}, done: 0 }; render(); });
+      footer.appendChild(lbl);
+      footer.appendChild(best);
+      footer.appendChild(retry);
+    } else {
+      var lbl2 = document.createElement('div');
+      lbl2.style.cssText = 'font-size:.85rem;color:var(--clr-muted)';
+      var answered_count = Object.keys(state.answers).length;
+      lbl2.textContent = answered_count + '/' + questions.length + ' question' + (answered_count > 1 ? 's' : '') + ' répondue' + (answered_count > 1 ? 's' : '');
+      footer.appendChild(lbl2);
+    }
+    container.appendChild(footer);
+  }
+
+  render();
+}
+
+// ===== Défi de la semaine =====
+function initDefi(defis) {
+  var card = document.getElementById('defi-card');
+  var widget = document.getElementById('defi-widget-preview');
+  if (!card && !widget) return;
+  var msPerWeek = 7 * 24 * 60 * 60 * 1000;
+  var startMs = new Date('2025-01-06').getTime(); // lundi
+  var weekIndex = Math.floor((Date.now() - startMs) / msPerWeek) % defis.length;
+  if (weekIndex < 0) weekIndex = 0;
+  var defi = defis[weekIndex];
+  var weekNum = (weekIndex % 52) + 1;
+  if (card) {
+    document.getElementById('defi-week-num').textContent = 'Défi semaine #' + weekNum;
+    document.getElementById('defi-category').textContent = defi.cat;
+    document.getElementById('defi-title').textContent = defi.title;
+    document.getElementById('defi-desc').textContent = defi.desc;
+    document.getElementById('defi-goal').textContent = '🎯 Objectif : ' + defi.goal;
+  }
+  if (widget) {
+    widget.textContent = '« ' + defi.title + ' »';
+  }
+}

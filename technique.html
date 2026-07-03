@@ -62,6 +62,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         <li><a href="materiel.html">Le matériel</a></li>
         <li><a href="vocabulaire.html">Vocabulaire</a></li>
         <li><a href="conseils.html">Conseils</a></li>
+        <li><a href="defi.html">Défi</a></li>
         <li><a href="carnet.html">Mon carnet</a></li>
         <li><a href="faq.html">FAQ</a></li>
         <li><a href="histoire.html">Histoire</a></li>
@@ -283,6 +284,12 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         <button class="replay-btn" type="button">⏸ Pause</button>
       </div>
 
+      <div class="quiz-section reveal">
+        <h3>Quiz — Testez vos connaissances</h3>
+        <p class="quiz-subtitle">5 questions sur la technique de lancer. À vos réponses !</p>
+        <div id="quiz-technique"></div>
+      </div>
+
     </div>
   </div>
 </section>
@@ -306,5 +313,14 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 </footer>
 
 <script src="assets/script.js"></script>
+<script>
+initQuiz([
+  { q: "Que doit-on viser pendant le lancer pour améliorer sa précision ?", opts: ["Les quilles au fond de la piste", "Les flèches au sol (à ≈ 4,5 m)", "La ligne de faute", "Le centre de la piste"], correct: 1, expl: "Les flèches sont à seulement 4,5 m : bien plus faciles à viser précisément que les quilles situées à 18 m." },
+  { q: "Comment s'appelle le lancer courbe caractéristique des joueurs avancés ?", opts: ["Le slice", "Le hook", "Le spin", "Le curve"], correct: 1, expl: "Le hook est le lancer qui courbe vers la fin de la piste. Il maximise les chances de strike en attaquant le pocket sous un angle optimal." },
+  { q: "Le balancier pendulaire sert à :", opts: ["Augmenter la vitesse de lancer", "Assurer un lâcher fluide et régulier", "Viser les flèches", "Équilibrer la boule"], correct: 1, expl: "Le balancier (swing) pendulaire exploite la gravité plutôt que la force musculaire, ce qui donne un geste plus régulier et moins fatigant." },
+  { q: "Qu'est-ce qu'un bon suivi (follow-through) après le lâcher ?", opts: ["Lâcher la boule et reculer immédiatement", "Lever le bras vers l'épaule opposée", "Monter le bras lanceur vers l'avant et le haut", "Croiser les bras dans le dos"], correct: 2, expl: "Le follow-through (prolongation) oriente la boule et assure un lâcher complet. Le bras doit finir haut, dans le prolongement naturel du swing." },
+  { q: "Où se situe le 'pocket' pour un droitier ?", opts: ["Entre la 1ère et la 2ème quille", "Entre la 1ère et la 3ème quille", "Entre la 1ère et la 5ème quille", "Entre la 2ème et la 4ème quille"], correct: 1, expl: "Pour un droitier, le pocket idéal est entre la 1ère et la 3ème quille (côté droit). Pour un gaucher, c'est entre la 1ère et la 2ème quille (côté gauche)." }
+], 'quiz-technique', 'technique');
+</script>
 </body>
 </html>

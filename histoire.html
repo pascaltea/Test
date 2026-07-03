@@ -48,6 +48,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         <li><a href="materiel.html">Le matériel</a></li>
         <li><a href="vocabulaire.html">Vocabulaire</a></li>
         <li><a href="conseils.html">Conseils</a></li>
+        <li><a href="defi.html">Défi</a></li>
         <li><a href="carnet.html">Mon carnet</a></li>
         <li><a href="faq.html">FAQ</a></li>
         <li><a href="histoire.html" class="active">Histoire</a></li>
@@ -116,6 +117,12 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       Du rite religieux allemand à l'astuce juridique américaine qui a donné naissance à la dixième quille, le bowling a une histoire bien plus riche que sa réputation de loisir du samedi soir ne le laisse penser.
     </div>
 
+    <div class="quiz-section reveal">
+      <h3>Quiz — Testez vos connaissances</h3>
+      <p class="quiz-subtitle">4 questions sur l'histoire du bowling. Surprenant !</p>
+      <div id="quiz-histoire"></div>
+    </div>
+
   </div>
 </section>
 
@@ -138,5 +145,13 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 </footer>
 
 <script src="assets/script.js"></script>
+<script>
+initQuiz([
+  { q: "Dans quel pays les premières formes de bowling ont-elles été retrouvées archéologiquement ?", opts: ["Grèce antique", "Égypte ancienne", "Mésopotamie", "Chine impériale"], correct: 1, expl: "Des objets ressemblant à des boules et des quilles ont été retrouvés dans des tombes égyptiennes datant de 3200 av. J.-C. — c'est la trace la plus ancienne connue." },
+  { q: "Pourquoi les États-Unis sont-ils passés de 9 à 10 quilles au XIXᵉ siècle ?", opts: ["Pour rendre le jeu plus difficile", "Pour contourner une loi interdisant le ninepin bowling", "Pour standardiser les règles internationales", "Pour augmenter le score maximum possible"], correct: 1, expl: "Le ninepin bowling avait été interdit dans plusieurs États américains (associé aux paris et aux jeux d'argent). Ajouter une 10ᵉ quille permettait de contourner légalement ces interdictions." },
+  { q: "En quelle année le Comité International Olympique (CIO) a-t-il reconnu le bowling comme sport ?", opts: ["1952", "1979", "1988", "2002"], correct: 2, expl: "Le CIO a reconnu la Fédération Mondiale de Quilles (World Bowling) comme fédération internationale en 1979, officialisant le statut de sport mondial du bowling." },
+  { q: "Quel est le bowling avec le plus de pistes au monde ?", opts: ["Bowlmor (New York)", "Nagoya International Bowl (Japon)", "Thunderbowl Lanes (Michigan)", "Lucky Strike (Las Vegas)"], correct: 1, expl: "Le Nagoya International Bowl au Japon détient le record avec 116 pistes sous le même toit — un complexe colossal dédié au bowling compétitif." }
+], 'quiz-histoire', 'histoire');
+</script>
 </body>
 </html>

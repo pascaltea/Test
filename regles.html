@@ -48,6 +48,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         <li><a href="materiel.html">Le matériel</a></li>
         <li><a href="vocabulaire.html">Vocabulaire</a></li>
         <li><a href="conseils.html">Conseils</a></li>
+        <li><a href="defi.html">Défi</a></li>
         <li><a href="carnet.html">Mon carnet</a></li>
         <li><a href="faq.html">FAQ</a></li>
         <li><a href="histoire.html">Histoire</a></li>
@@ -185,6 +186,12 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
     <p style="text-align:center;margin-top:32px;">Une question précise sur les règles ? Consultez notre <a href="faq.html">FAQ</a> ou découvrez <a href="histoire.html">l'histoire du bowling</a>.</p>
 
+    <div class="quiz-section reveal">
+      <h3>Quiz — Testez vos connaissances</h3>
+      <p class="quiz-subtitle">5 questions sur les règles du bowling. Répondez à votre rythme.</p>
+      <div id="quiz-regles"></div>
+    </div>
+
   </div>
 </section>
 
@@ -207,5 +214,14 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 </footer>
 
 <script src="assets/script.js"></script>
+<script>
+initQuiz([
+  { q: "Combien y a-t-il de frames dans une partie de bowling ?", opts: ["8", "10", "12", "15"], correct: 1, expl: "Une partie standard se compose de 10 frames. La 10ᵉ frame peut aller jusqu'à 3 lancers." },
+  { q: "Combien vaut un strike si les deux lancers suivants font 7 puis 3 quilles ?", opts: ["10 points", "17 points", "20 points", "23 points"], correct: 2, expl: "Un strike = 10 + les 2 lancers suivants. Ici : 10 + 7 + 3 = 20 points pour cette frame." },
+  { q: "Qu'est-ce qu'un spare ?", opts: ["Renverser toutes les quilles au 1er lancer", "Renverser toutes les quilles en 2 lancers", "Lancer dans la gouttière", "Faire 3 strikes d'affilée"], correct: 1, expl: "Un spare, c'est abattre les quilles restantes au 2ᵉ lancer. Bonus : le lancer suivant s'ajoute à cette frame." },
+  { q: "Comment s'appelle le fait de réaliser 3 strikes consécutifs ?", opts: ["Triple", "Turkey", "Hat-trick", "Hambone"], correct: 1, expl: "Turkey (ou dinde) désigne 3 strikes d'affilée. 4 strikes consécutifs s'appelle un Hambone." },
+  { q: "Quel est le score parfait au bowling ?", opts: ["200", "270", "300", "330"], correct: 2, expl: "Le score parfait est 300 points : 12 strikes consécutifs (10 frames + 2 bonus à la 10ᵉ frame)." }
+], 'quiz-regles', 'regles');
+</script>
 </body>
 </html>

@@ -48,6 +48,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         <li><a href="materiel.html">Le matériel</a></li>
         <li><a href="vocabulaire.html" class="active">Vocabulaire</a></li>
         <li><a href="conseils.html">Conseils</a></li>
+        <li><a href="defi.html">Défi</a></li>
         <li><a href="carnet.html">Mon carnet</a></li>
         <li><a href="faq.html">FAQ</a></li>
         <li><a href="histoire.html">Histoire</a></li>
@@ -137,6 +138,12 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     </table>
 
     <p style="text-align:center;margin-top:32px;">D'autres questions sur le vocabulaire ou les règles ? Consultez notre <a href="faq.html">FAQ</a>.</p>
+
+    <div class="quiz-section reveal">
+      <h3>Quiz — Testez vos connaissances</h3>
+      <p class="quiz-subtitle">5 questions sur le vocabulaire du bowling. Saurez-vous tous les trouver ?</p>
+      <div id="quiz-vocabulaire"></div>
+    </div>
   </div>
 </section>
 
@@ -159,5 +166,14 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 </footer>
 
 <script src="assets/script.js"></script>
+<script>
+initQuiz([
+  { q: "Que signifie 'Hambone' ?", opts: ["Un seul spare", "4 strikes consécutifs", "Un gutter ball", "Un split impossible"], correct: 1, expl: "Hambone désigne 4 strikes d'affilée. Le terme a été popularisé par ESPN. 3 strikes = Turkey, 4 strikes = Hambone." },
+  { q: "Où se situe le 'pocket' (zone idéale pour le strike) pour un droitier ?", opts: ["Entre la 1ère et la 2ème quille (gauche)", "Entre la 1ère et la 3ème quille (droite)", "Entre la 4ème et la 7ème quille", "En plein centre de la 1ère quille"], correct: 1, expl: "Pour un droitier, le pocket est l'angle entre la 1ère (tête) et la 3ème quille. Pour un gaucher, c'est entre la 1ère et la 2ème quille." },
+  { q: "Quel est le surnom de la quille n°5 ?", opts: ["Headpin", "Kingpin", "Brooklyn", "Tap"], correct: 1, expl: "La quille n°5, au centre du triangle, est surnommée 'Kingpin'. C'est la quille la plus importante : une bonne boule l'atteint toujours dans les strikes." },
+  { q: "Un 'split' au bowling, c'est :", opts: ["Un strike raté de peu", "Des quilles restantes non adjacentes après le 1er lancer", "Renverser toutes les quilles en 2 lancers", "Un lancer dans la gouttière"], correct: 1, expl: "Un split, c'est quand des quilles restent debout sans être voisines après le 1er lancer, rendant le spare difficile (ex : 7-10 split)." },
+  { q: "Un 'laner' désigne :", opts: ["Un joueur débutant", "Un joueur habitué à jouer régulièrement dans une salle", "Une technique de lancer", "La personne qui gère les scores"], correct: 1, expl: "Un laner (ou 'régulier') est quelqu'un qui joue fréquemment dans la même salle et en connaît les particularités (conditions d'huile, pistes favorites)." }
+], 'quiz-vocabulaire', 'vocabulaire');
+</script>
 </body>
 </html>

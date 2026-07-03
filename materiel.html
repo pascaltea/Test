@@ -48,6 +48,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         <li><a href="materiel.html" class="active">Le matériel</a></li>
         <li><a href="vocabulaire.html">Vocabulaire</a></li>
         <li><a href="conseils.html">Conseils</a></li>
+        <li><a href="defi.html">Défi</a></li>
         <li><a href="carnet.html">Mon carnet</a></li>
         <li><a href="faq.html">FAQ</a></li>
         <li><a href="histoire.html">Histoire</a></li>
@@ -142,6 +143,12 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       </a>
     </div>
 
+    <div class="quiz-section reveal">
+      <h3>Quiz — Testez vos connaissances</h3>
+      <p class="quiz-subtitle">4 questions sur le matériel de bowling.</p>
+      <div id="quiz-materiel"></div>
+    </div>
+
   </div>
 </section>
 
@@ -164,5 +171,13 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 </footer>
 
 <script src="assets/script.js"></script>
+<script>
+initQuiz([
+  { q: "Quel est le poids maximum autorisé pour une boule de bowling en compétition ?", opts: ["12 livres (≈ 5,4 kg)", "14 livres (≈ 6,4 kg)", "16 livres (≈ 7,3 kg)", "18 livres (≈ 8,2 kg)"], correct: 2, expl: "Le règlement fixe la limite à 16 livres (≈ 7,3 kg). C'est aussi le poids qu'utilisent la plupart des joueurs expérimentés." },
+  { q: "Pourquoi les chaussures de bowling sont-elles asymétriques gauche/droite ?", opts: ["Pour le style", "Une semelle glisse (pied avant), l'autre freine (pied arrière)", "Pour s'adapter à la taille du pied", "Elles ne sont pas asymétriques"], correct: 1, expl: "La semelle du pied qui glisse en dernier (gauche pour un droitier) est lisse pour faciliter le glissé, l'autre est antidérapante pour le freinage." },
+  { q: "Quelle matière est recommandée pour une boule de débutant ?", opts: ["Urétane", "Résine réactive", "Polyester", "Particule"], correct: 2, expl: "Le polyester (plastique) roule droit, est peu onéreux et facile à contrôler — idéal pour débuter. L'urétane et la résine réactive créent plus de hook et sont réservés aux joueurs confirmés." },
+  { q: "Quelle prise offre le plus de contrôle et est recommandée aux débutants ?", opts: ["Prise conventionnelle (3 doigts enfoncés)", "Prise fingertip (juste les bouts des doigts)", "Prise à pleine main", "Prise pouce seul"], correct: 0, expl: "La prise conventionnelle (doigts enfoncés jusqu'au 2ᵉ phalange) donne plus de stabilité. La prise fingertip, utilisée par les avancés, facilite la rotation mais demande de la technique." }
+], 'quiz-materiel', 'materiel');
+</script>
 </body>
 </html>
