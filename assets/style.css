@@ -1,4 +1,3 @@
-@import url('https://fonts.googleapis.com/css2?family=Six+Caps&family=Bebas+Neue&family=Archivo:wght@400;500;600;700;800&family=Marcellus&display=swap');
 
 :root {
   --font: 'Archivo', "Segoe UI", "Helvetica Neue", Arial, sans-serif;
@@ -542,3 +541,11 @@ ul.score-list { list-style: none; margin: 0 0 20px; padding: 0; display: flex; f
 .marker-user { width: 16px; height: 16px; border-radius: 50%; background: #3ee6e6; border: 3px solid #0a0e28; box-shadow: 0 0 12px rgba(62,230,230,.7); }
 .marker-club { font-size: 24px; line-height: 1; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.5)); }
 @media (max-width: 640px) { #map { height: 340px; } .search-input { min-width: 100%; } .btn-sm { margin-left: 0; } }
+
+/* Mobile performance: disable GPU-heavy heroGrid, slow down drifts */
+@media (max-width: 768px) {
+  .hero::after { display: none; }
+  .hero::before { animation-duration: 18s; }
+  .hero .container::before { animation-duration: 14s; }
+  .page-hero::before { animation-duration: 20s; }
+}

@@ -3,12 +3,17 @@ const _hdr = document.querySelector('.site-header');
 if (_hdr) window.addEventListener('scroll', () =>
   _hdr.classList.toggle('scrolled', window.scrollY > 40), { passive: true });
 
-// Scroll reveal
+// Scroll reveal — synchronously show elements already in viewport, observe the rest
+const _revealEl = el => el.classList.add('revealed');
 const _ro = new IntersectionObserver(
-  es => es.forEach(e => { if (e.isIntersecting) { e.target.classList.add('revealed'); _ro.unobserve(e.target); } }),
-  { threshold: 0.1 }
+  es => es.forEach(e => { if (e.isIntersecting) { _revealEl(e.target); _ro.unobserve(e.target); } }),
+  { threshold: 0, rootMargin: '0px 0px 80px 0px' }
 );
-document.querySelectorAll('.reveal').forEach(el => _ro.observe(el));
+document.querySelectorAll('.reveal').forEach(el => {
+  const r = el.getBoundingClientRect();
+  if (r.top < window.innerHeight && r.bottom > 0) { _revealEl(el); }
+  else { _ro.observe(el); }
+});
 
 document.addEventListener("DOMContentLoaded", function () {
   var toggle = document.querySelector(".menu-toggle");
