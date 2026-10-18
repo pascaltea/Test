@@ -39,7 +39,9 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 .search-input{width:100%;padding:13px 20px;border:1px solid rgba(242,239,232,.3);border-radius:3px;font-size:1rem;font-family:inherit;background:rgba(242,239,232,.08);color:#f2efe8;outline:none;box-sizing:border-box;transition:box-shadow .15s}
 .search-input:focus{box-shadow:0 0 0 2px #3ee6e6}
 .search-radius{-webkit-appearance:none;appearance:none;padding:13px 36px 13px 20px;border:1px solid rgba(242,239,232,.3);border-radius:3px;font-size:1rem;font-family:inherit;font-weight:600;background:#10143a url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath fill='%23f2efe8' d='M5 6L0 0h10z'/%3E%3C/svg%3E") no-repeat right 14px center;color:#f2efe8;cursor:pointer;outline:none;min-width:110px;box-sizing:border-box}
-.btn-reset-france{display:block;margin:12px auto 0;background:none;border:1px solid rgba(242,239,232,.35);color:rgba(242,239,232,.8);border-radius:3px;padding:6px 18px;font-family:inherit;font-size:.85rem;cursor:pointer;transition:all .15s}
+.map-shortcuts{display:flex;flex-wrap:wrap;justify-content:center;gap:10px;margin-top:12px}
+.btn-reset-france[hidden]{display:none}
+.btn-reset-france{display:block;margin:0;background:none;border:1px solid rgba(242,239,232,.35);color:rgba(242,239,232,.8);border-radius:3px;padding:6px 18px;font-family:inherit;font-size:.85rem;cursor:pointer;transition:all .15s}
 .btn-reset-france:hover{border-color:#fff;color:#fff;background:rgba(255,255,255,.08)}
 
 /* ── Autocomplete ────────────────────────────────────────────────────────────── */
@@ -173,7 +175,10 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       <button id="btn-search" class="btn">Rechercher</button>
       <button id="btn-locate" class="btn btn-secondary">📍 Me localiser</button>
     </div>
-    <button id="btn-reset" class="btn-reset-france" hidden>← Voir toute la France</button>
+    <div class="map-shortcuts">
+      <button id="btn-reset" class="btn-reset-france" hidden>← Voir toute la France</button>
+      <button id="btn-reunion" class="btn-reset-france">🌴 Voir La Réunion</button>
+    </div>
   </div>
 </div>
 
@@ -298,6 +303,12 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   const btnReset = document.getElementById('btn-reset');
 
   function showReset() { btnReset.hidden = false; }
+
+  document.getElementById('btn-reunion').addEventListener('click', function () {
+    map.setView([-21.12, 55.53], 10);
+    document.getElementById('map').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    showReset();
+  });
   function hideReset() { btnReset.hidden = true; }
 
   btnReset.addEventListener('click', function () {
