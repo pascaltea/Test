@@ -26,12 +26,17 @@ jobs:
             https://overpass.kumi.systems/api/interpreter \
             https://maps.mail.ru/osm/tools/overpass/api/interpreter; do
             echo "Essai : $url"
-            if curl -sSf -m 180 -X POST --data-urlencode "data=$QUERY" "$url" -o raw.json \
-              && jq -e '.elements | length > 50' raw.json > /dev/null; then
+            code=$(curl -sS -m 180 -o raw.json -w '%{http_code}' \
+              -A 'bowlingfacile.fr annuaire (+https://bowlingfacile.fr)' \
+              -H 'Accept: application/json' \
+              --data-urlencode "data=$QUERY" "$url" || echo 000)
+            echo "HTTP $code"
+            if [ "$code" = 200 ] && jq -e '.elements | length > 50' raw.json > /dev/null 2>&1; then
               jq -c '{elements: [.elements[] | {type, id, lat, lon, center, tags}]}' raw.json > assets/bowlings.json
               echo "$(jq '.elements | length' assets/bowlings.json) bowlings récupérés"
               exit 0
             fi
+            head -c 500 raw.json 2>/dev/null; echo
           done
           echo "Aucun serveur Overpass n'a répondu" >&2
           exit 1
