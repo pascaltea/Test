@@ -346,6 +346,14 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   }
 
   async function fetchAllFrance() {
+    // Liste pré-générée chaque semaine par .github/workflows/bowlings.yml ; Overpass en secours
+    try {
+      const r = await fetch('assets/bowlings.json', { cache: 'no-cache' });
+      if (r.ok) {
+        const els = (await r.json()).elements || [];
+        if (els.length) return els;
+      }
+    } catch (e) { /* on tente Overpass */ }
     return overpass('[out:json][timeout:60];(node["leisure"="bowling_alley"](41.3,-5.2,51.2,9.7);way["leisure"="bowling_alley"](41.3,-5.2,51.2,9.7););out body center qt;');
   }
 

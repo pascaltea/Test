@@ -1,0 +1,44 @@
+name: Mise à jour des bowlings
+
+on:
+  schedule:
+    - cron: '17 4 * * 1'
+  workflow_dispatch:
+  push:
+    paths:
+      - .github/workflows/bowlings.yml
+
+permissions:
+  contents: write
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Télécharger les bowlings de France depuis OpenStreetMap
+        run: |
+          QUERY='[out:json][timeout:120];(node["leisure"="bowling_alley"](41.3,-5.2,51.2,9.7);way["leisure"="bowling_alley"](41.3,-5.2,51.2,9.7););out body center qt;'
+          for url in \
+            https://overpass-api.de/api/interpreter \
+            https://overpass.private.coffee/api/interpreter \
+            https://overpass.kumi.systems/api/interpreter \
+            https://maps.mail.ru/osm/tools/overpass/api/interpreter; do
+            echo "Essai : $url"
+            if curl -sSf -m 180 -X POST --data-urlencode "data=$QUERY" "$url" -o raw.json \
+              && jq -e '.elements | length > 50' raw.json > /dev/null; then
+              jq -c '{elements: [.elements[] | {type, id, lat, lon, center, tags}]}' raw.json > assets/bowlings.json
+              echo "$(jq '.elements | length' assets/bowlings.json) bowlings récupérés"
+              exit 0
+            fi
+          done
+          echo "Aucun serveur Overpass n'a répondu" >&2
+          exit 1
+
+      - name: Enregistrer la liste si elle a changé
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898900+github-actions[bot]@users.noreply.github.com"
+          git add assets/bowlings.json
+          git diff --cached --quiet || { git commit -m "Mise à jour automatique de la liste des bowlings" && git push; }
