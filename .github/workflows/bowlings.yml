@@ -19,7 +19,7 @@ jobs:
 
       - name: Télécharger les bowlings de France depuis OpenStreetMap
         run: |
-          QUERY='[out:json][timeout:120];(node["leisure"="bowling_alley"](41.3,-5.2,51.2,9.7);way["leisure"="bowling_alley"](41.3,-5.2,51.2,9.7););out body center qt;'
+          QUERY='[out:json][timeout:120];(node["leisure"="bowling_alley"](41.3,-5.2,51.2,9.7);way["leisure"="bowling_alley"](41.3,-5.2,51.2,9.7);node["leisure"="bowling_alley"](-21.45,55.2,-20.85,55.85);way["leisure"="bowling_alley"](-21.45,55.2,-20.85,55.85););out body center qt;'
           for url in \
             https://overpass-api.de/api/interpreter \
             https://overpass.private.coffee/api/interpreter \

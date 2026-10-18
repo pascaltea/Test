@@ -354,7 +354,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         if (els.length) return els;
       }
     } catch (e) { /* on tente Overpass */ }
-    return overpass('[out:json][timeout:60];(node["leisure"="bowling_alley"](41.3,-5.2,51.2,9.7);way["leisure"="bowling_alley"](41.3,-5.2,51.2,9.7););out body center qt;');
+    return overpass('[out:json][timeout:60];(node["leisure"="bowling_alley"](41.3,-5.2,51.2,9.7);way["leisure"="bowling_alley"](41.3,-5.2,51.2,9.7);node["leisure"="bowling_alley"](-21.45,55.2,-20.85,55.85);way["leisure"="bowling_alley"](-21.45,55.2,-20.85,55.85););out body center qt;');
   }
 
   async function fetchNearby(lat, lon, radius) {
@@ -567,7 +567,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     try {
       const url = 'https://nominatim.openstreetmap.org/search'
         + '?q=' + encodeURIComponent(query)
-        + '&countrycodes=fr&format=json&limit=8&accept-language=fr&addressdetails=1';
+        + '&countrycodes=fr,re&format=json&limit=8&accept-language=fr&addressdetails=1';
       const r = await fetch(url);
       if (!r.ok) return;
       const data = await r.json();
@@ -647,7 +647,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     try {
       const r = await fetch('https://nominatim.openstreetmap.org/search?q='
         + encodeURIComponent(val)
-        + '&countrycodes=fr&format=json&limit=1&accept-language=fr');
+        + '&countrycodes=fr,re&format=json&limit=1&accept-language=fr');
       const d = await r.json();
       if (!d.length) { setStatus('Adresse non trouvée. Essayez un nom de ville ou un code postal.'); return; }
       await search(+d[0].lat, +d[0].lon);
