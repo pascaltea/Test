@@ -215,9 +215,9 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
   // ── Map ────────────────────────────────────────────────────────────────────
   const map = L.map('map').setView([46.5, 2.3], 6);
-  L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
-    attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> © <a href="https://carto.com/attributions">CARTO</a>',
-    subdomains: 'abcd', maxZoom: 19
+  L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+    maxZoom: 19
   }).addTo(map);
 
   // ── MarkerCluster ──────────────────────────────────────────────────────────
@@ -315,12 +315,34 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   });
 
   // ── Overpass ───────────────────────────────────────────────────────────────
+  // Plusieurs serveurs : si l'un est saturé ou ne répond pas, on passe au suivant
+  const OVERPASS_ENDPOINTS = [
+    'https://overpass-api.de/api/interpreter',
+    'https://overpass.private.coffee/api/interpreter',
+    'https://overpass.kumi.systems/api/interpreter',
+    'https://maps.mail.ru/osm/tools/overpass/api/interpreter'
+  ];
+
   async function overpass(q) {
-    const r = await fetch('https://overpass-api.de/api/interpreter', {
-      method: 'POST', body: 'data=' + encodeURIComponent(q)
-    });
-    if (!r.ok) throw new Error('HTTP ' + r.status);
-    return (await r.json()).elements || [];
+    let lastErr;
+    for (const url of OVERPASS_ENDPOINTS) {
+      const ctrl = new AbortController();
+      const timer = setTimeout(function () { ctrl.abort(); }, 45000);
+      try {
+        const r = await fetch(url, {
+          method: 'POST', body: 'data=' + encodeURIComponent(q),
+          headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+          signal: ctrl.signal
+        });
+        if (!r.ok) throw new Error('HTTP ' + r.status);
+        return (await r.json()).elements || [];
+      } catch (e) {
+        lastErr = e;
+      } finally {
+        clearTimeout(timer);
+      }
+    }
+    throw lastErr;
   }
 
   async function fetchAllFrance() {
