@@ -19,7 +19,7 @@ jobs:
 
       - name: Télécharger les bowlings de France depuis OpenStreetMap
         run: |
-          QUERY='[out:json][timeout:120];(node["leisure"="bowling_alley"](41.3,-5.2,51.2,9.7);way["leisure"="bowling_alley"](41.3,-5.2,51.2,9.7);node["leisure"="bowling_alley"](-21.45,55.2,-20.85,55.85);way["leisure"="bowling_alley"](-21.45,55.2,-20.85,55.85););out body center qt;'
+          QUERY='[out:json][timeout:120];(node["leisure"="bowling_alley"](41.3,-5.2,51.2,9.7);way["leisure"="bowling_alley"](41.3,-5.2,51.2,9.7);node["leisure"="bowling_alley"](15.8,-61.85,16.55,-60.95);way["leisure"="bowling_alley"](15.8,-61.85,16.55,-60.95);node["leisure"="bowling_alley"](14.35,-61.25,14.9,-60.8);way["leisure"="bowling_alley"](14.35,-61.25,14.9,-60.8);node["leisure"="bowling_alley"](2.1,-54.6,5.8,-51.6);way["leisure"="bowling_alley"](2.1,-54.6,5.8,-51.6);node["leisure"="bowling_alley"](-21.45,55.2,-20.85,55.85);way["leisure"="bowling_alley"](-21.45,55.2,-20.85,55.85);node["leisure"="bowling_alley"](-13.05,45.0,-12.6,45.35);way["leisure"="bowling_alley"](-13.05,45.0,-12.6,45.35););out body center qt;'
           for url in \
             https://overpass-api.de/api/interpreter \
             https://overpass.private.coffee/api/interpreter \

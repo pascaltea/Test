@@ -177,7 +177,11 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     </div>
     <div class="map-shortcuts">
       <button id="btn-reset" class="btn-reset-france" hidden>← Voir toute la France</button>
-      <button id="btn-reunion" class="btn-reset-france">🌴 Voir La Réunion</button>
+      <button class="btn-reset-france" data-view="16.2,-61.55,9">Guadeloupe</button>
+      <button class="btn-reset-france" data-view="14.65,-61.02,10">Martinique</button>
+      <button class="btn-reset-france" data-view="4.0,-53.1,7">Guyane</button>
+      <button class="btn-reset-france" data-view="-21.12,55.53,10">La Réunion</button>
+      <button class="btn-reset-france" data-view="-12.82,45.15,11">Mayotte</button>
     </div>
   </div>
 </div>
@@ -304,10 +308,14 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
   function showReset() { btnReset.hidden = false; }
 
-  document.getElementById('btn-reunion').addEventListener('click', function () {
-    map.setView([-21.12, 55.53], 10);
-    document.getElementById('map').scrollIntoView({ behavior: 'smooth', block: 'start' });
-    showReset();
+  // Raccourcis outre-mer : data-view="lat,lon,zoom"
+  document.querySelectorAll('[data-view]').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      const v = btn.dataset.view.split(',').map(Number);
+      map.setView([v[0], v[1]], v[2]);
+      document.getElementById('map').scrollIntoView({ behavior: 'smooth', block: 'start' });
+      showReset();
+    });
   });
   function hideReset() { btnReset.hidden = true; }
 
@@ -365,7 +373,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         if (els.length) return els;
       }
     } catch (e) { /* on tente Overpass */ }
-    return overpass('[out:json][timeout:60];(node["leisure"="bowling_alley"](41.3,-5.2,51.2,9.7);way["leisure"="bowling_alley"](41.3,-5.2,51.2,9.7);node["leisure"="bowling_alley"](-21.45,55.2,-20.85,55.85);way["leisure"="bowling_alley"](-21.45,55.2,-20.85,55.85););out body center qt;');
+    return overpass('[out:json][timeout:60];(node["leisure"="bowling_alley"](41.3,-5.2,51.2,9.7);way["leisure"="bowling_alley"](41.3,-5.2,51.2,9.7);node["leisure"="bowling_alley"](15.8,-61.85,16.55,-60.95);way["leisure"="bowling_alley"](15.8,-61.85,16.55,-60.95);node["leisure"="bowling_alley"](14.35,-61.25,14.9,-60.8);way["leisure"="bowling_alley"](14.35,-61.25,14.9,-60.8);node["leisure"="bowling_alley"](2.1,-54.6,5.8,-51.6);way["leisure"="bowling_alley"](2.1,-54.6,5.8,-51.6);node["leisure"="bowling_alley"](-21.45,55.2,-20.85,55.85);way["leisure"="bowling_alley"](-21.45,55.2,-20.85,55.85);node["leisure"="bowling_alley"](-13.05,45.0,-12.6,45.35);way["leisure"="bowling_alley"](-13.05,45.0,-12.6,45.35););out body center qt;');
   }
 
   async function fetchNearby(lat, lon, radius) {
@@ -578,7 +586,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     try {
       const url = 'https://nominatim.openstreetmap.org/search'
         + '?q=' + encodeURIComponent(query)
-        + '&countrycodes=fr,re&format=json&limit=8&accept-language=fr&addressdetails=1';
+        + '&countrycodes=fr,gp,mq,gf,re,yt&format=json&limit=8&accept-language=fr&addressdetails=1';
       const r = await fetch(url);
       if (!r.ok) return;
       const data = await r.json();
@@ -658,7 +666,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     try {
       const r = await fetch('https://nominatim.openstreetmap.org/search?q='
         + encodeURIComponent(val)
-        + '&countrycodes=fr,re&format=json&limit=1&accept-language=fr');
+        + '&countrycodes=fr,gp,mq,gf,re,yt&format=json&limit=1&accept-language=fr');
       const d = await r.json();
       if (!d.length) { setStatus('Adresse non trouvée. Essayez un nom de ville ou un code postal.'); return; }
       await search(+d[0].lat, +d[0].lon);
